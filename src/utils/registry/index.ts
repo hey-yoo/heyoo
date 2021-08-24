@@ -6,26 +6,26 @@ batch registry commands
 */
 export default function registry(program: Command, commands: commandItem[]) {
   commands.forEach((item) => {
-    program.command(item.command).action(item.action);
+    let _program = program.command(item.command).action(item.action);
     if (Array.isArray(item.option)) {
       item.option.forEach((opt) => {
         const [flags, description, defaultValue] = opt;
-        program.option(flags, description, defaultValue);
+        _program = _program.option(flags, description, defaultValue);
       });
     }
     if (Array.isArray(item.requiredOption)) {
       item.requiredOption.forEach((opt) => {
         const [flags, description, defaultValue] = opt;
-        program.requiredOption(flags, description, defaultValue);
+        _program = _program.requiredOption(flags, description, defaultValue);
       });
     }
     if (Array.isArray(item.argument)) {
       item.argument.forEach((arg) => {
-        program.argument(arg);
+        _program = _program.argument(arg);
       });
     }
     if (item.description) {
-      program.description(item.description);
+      _program = _program.description(item.description);
     }
   });
 }
