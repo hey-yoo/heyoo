@@ -13,6 +13,7 @@ specifiers:
   eslint: ^7.32.0
   eslint-plugin-flowtype: ^5.9.0
   eslint-plugin-import: ^2.24.0
+  hey-yoo-utils: ^1.0.0
   husky: ^7.0.1
   lint-staged: ^11.1.2
   ow: ^0.27.0
@@ -26,6 +27,7 @@ specifiers:
 dependencies:
   chalk: 4.1.2
   commander: 8.1.0
+  hey-yoo-utils: 1.0.0
   ow: 0.27.0
   std-terminal-logger: 2.0.0_chalk@4.1.2
 
@@ -2253,6 +2255,12 @@ packages:
     dependencies:
       function-bind: 1.1.1
     dev: true
+
+  /hey-yoo-utils/1.0.0:
+    resolution: {integrity: sha512-adySYXtwRwz81dFOL9zC8cvO9SM4pWZcn+BVTZaGb81i4FjfnJSKiz+3XlFbMPgQh6r5X9fEJ+qNePIPEshhgw==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    requiresBuild: true
+    dev: false
 
   /hosted-git-info/2.8.9:
     resolution: {integrity: sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==}

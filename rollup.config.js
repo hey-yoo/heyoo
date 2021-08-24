@@ -16,7 +16,7 @@ module.exports = {
     file: resolve(pkg.exports),
     banner: '#!/usr/bin/env node',
   },
-  external: ['commander', 'std-terminal-logger', 'ow'],
+  external: ['commander', 'std-terminal-logger', 'ow', 'hey-yoo-utils'],
   plugins: [
     typescript({
       tsconfig: 'tsconfig.json',

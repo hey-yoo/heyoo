@@ -52,6 +52,7 @@
   "dependencies": {
     "chalk": "^4.1.2",
     "commander": "^8.1.0",
+    "hey-yoo-utils": "^1.0.0",
     "ow": "^0.27.0",
     "std-terminal-logger": "^2.0.0"
   }
