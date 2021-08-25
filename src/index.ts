@@ -34,7 +34,7 @@ registry(
   commands.concat(
     // @ts-ignore
     outsideCommandConfigs.filter((item) => {
-      const validateErr = validate(item, item.name, predicates.heyConfig);
+      const validateErr = validate(item, item.name, predicates.pluginsConfig);
       if (validateErr) {
         log(label.error, validateErr);
         return false;

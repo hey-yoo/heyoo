@@ -1,7 +1,7 @@
-import heyConfig from './heyConfig';
+import pluginsConfig from './pluginsConfig';
 import registry from './registry';
 
 export default {
-  heyConfig,
+  pluginsConfig,
   registry,
 };
