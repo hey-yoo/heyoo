@@ -2,7 +2,7 @@ import { Command } from 'commander';
 import { command } from '../../types';
 
 /**
-batch registry commands
+batch registry plugins commands
 */
 export default function registry(program: Command, commands: command[]) {
   commands.forEach((item) => {

@@ -29,7 +29,7 @@ const outsideCommandConfigs = [] as pluginsConfig[];
 registry(
   program,
   /**
-  Filter out external commands that do not meet the requirements
+  Filter out plugins commands that do not meet the requirements
   */
   commands.concat(
     // @ts-ignore
