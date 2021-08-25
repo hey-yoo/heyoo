@@ -5,7 +5,7 @@ import commands from './commands';
 import registry from './utils/registry';
 import requirePackageJson from './utils/requirePackageJson';
 import { validate, predicates } from './utils/validate';
-import { heyConfig } from './types';
+import { pluginsConfig } from './types';
 import { ART_WORD_HEY_YOO, RESERVED_WORD } from './constants';
 import { pathExtra } from 'hey-yoo-utils';
 
@@ -24,7 +24,7 @@ program
 
 ${packageJson?.description}`);
 
-const outsideCommandConfigs = [] as heyConfig[];
+const outsideCommandConfigs = [] as pluginsConfig[];
 
 registry(
   program,

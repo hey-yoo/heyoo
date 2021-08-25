@@ -1,4 +1,4 @@
-export interface commandItem {
+export interface command {
   command: string;
   action: (...args: any[]) => void | Promise<void>;
   option?: string[][];
@@ -7,8 +7,8 @@ export interface commandItem {
   description?: string;
 }
 
-export interface heyConfig {
+export interface pluginsConfig {
   name: string;
   version: string;
-  registry: commandItem[];
+  registry: command[];
 }

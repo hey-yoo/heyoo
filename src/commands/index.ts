@@ -1,4 +1,4 @@
-import { commandItem } from '../types';
+import { command } from '../types';
 import run from './run';
 import { text } from 'std-terminal-logger';
 
@@ -12,6 +12,6 @@ const commands = [
     ],
     description: text.purple('run customize command'),
   },
-] as commandItem[];
+] as command[];
 
 export default commands;

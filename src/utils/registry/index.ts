@@ -1,10 +1,10 @@
 import { Command } from 'commander';
-import { commandItem } from '../../types';
+import { command } from '../../types';
 
 /**
 batch registry commands
 */
-export default function registry(program: Command, commands: commandItem[]) {
+export default function registry(program: Command, commands: command[]) {
   commands.forEach((item) => {
     let _program = program.command(item.command).action(item.action);
     if (Array.isArray(item.option)) {
