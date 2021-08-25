@@ -1,6 +1,8 @@
+export type actionFn = (...args: any[]) => void | Promise<void>;
+
 export interface command {
   command: string;
-  action: (...args: any[]) => void | Promise<void>;
+  action: actionFn;
   option?: string[][];
   requiredOption?: string[][];
   argument?: string[];
@@ -11,4 +13,19 @@ export interface pluginsConfig {
   name: string;
   version: string;
   registry: command[];
+}
+
+export interface packCommand {
+  command: string;
+  action: actionFn;
+}
+
+export interface packConfig {
+  name: string;
+  version: string;
+  commands: (string | packCommand)[];
+}
+
+export interface projectConfig {
+  packs: string;
 }
