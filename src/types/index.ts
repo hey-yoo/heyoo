@@ -15,15 +15,10 @@ export interface pluginsConfig {
   registry: command[];
 }
 
-export interface packCommand {
-  command: string;
-  action: actionFn;
-}
-
 export interface packConfig {
   name: string;
   version: string;
-  commands: (string | packCommand)[];
+  commands: string[];
 }
 
 export interface projectConfig {
