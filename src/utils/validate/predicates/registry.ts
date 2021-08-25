@@ -4,7 +4,7 @@ import { RESERVED_WORD } from '../../../constants';
 const ow = owDefault.default;
 
 const registry = ow.array.ofType(
-  ow.optional.object.exactShape({
+  ow.optional.object.partialShape({
     // required
     command: ow.string.not.empty.lowercase.not.oneOf(RESERVED_WORD),
     action: ow.function,
