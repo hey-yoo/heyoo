@@ -21,7 +21,7 @@ async function hey() {
   program
     .name('hey')
     .version(packageJson?.version || '')
-    .usage(text.green('[command]')).description(`${text.amber(ART_WORD_HEY_YOO)}
+    .usage(text.green('[command]')).description(`${ART_WORD_HEY_YOO}
 
 ${packageJson?.description}`);
 
