@@ -6,6 +6,7 @@ const ow = owDefault.default;
 const pluginsConfig = ow.object.partialShape({
   name: ow.string.not.empty,
   version: ow.string.not.empty,
+  type: ow.string.equals('plugins'),
   registry,
 });
 

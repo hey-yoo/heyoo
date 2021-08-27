@@ -12,15 +12,18 @@ export interface command {
 export interface pluginsConfig {
   name: string;
   version: string;
+  type: 'plugins';
   registry: command[];
 }
 
 export interface packConfig {
   name: string;
   version: string;
+  type: 'packs';
   commands: string[];
 }
 
 export interface projectConfig {
+  type: 'project';
   packs: string;
 }
