@@ -8,6 +8,16 @@ const resolve = function (...args) {
   return path.resolve(__dirname, ...args);
 };
 
+const externalDeps = [
+  'commander',
+  'std-terminal-logger',
+  'ow',
+  'hey-yoo-utils',
+  'file-url',
+];
+
+const externalNode = ['path', 'fs', 'process'];
+
 module.exports = {
   input: resolve('./src/index.ts'),
   output: {
@@ -16,7 +26,7 @@ module.exports = {
     file: resolve(pkg.exports),
     banner: '#!/usr/bin/env node',
   },
-  external: ['commander', 'std-terminal-logger', 'ow', 'hey-yoo-utils', 'path'],
+  external: [...externalDeps, ...externalNode],
   plugins: [
     typescript({
       tsconfig: 'tsconfig.json',
@@ -33,11 +43,11 @@ module.exports = {
           '@babel/preset-env',
           {
             targets: {
-              node: '12.20'
-            }
+              node: '14.13',
+            },
           },
-        ]
-      ]
+        ],
+      ],
     }),
   ],
 };
