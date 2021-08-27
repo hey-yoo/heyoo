@@ -16,7 +16,7 @@ module.exports = {
     file: resolve(pkg.exports),
     banner: '#!/usr/bin/env node',
   },
-  external: ['commander', 'std-terminal-logger', 'ow', 'hey-yoo-utils'],
+  external: ['commander', 'std-terminal-logger', 'ow', 'hey-yoo-utils', 'path'],
   plugins: [
     typescript({
       tsconfig: 'tsconfig.json',
@@ -28,6 +28,16 @@ module.exports = {
       babelHelpers: 'bundled',
       exclude: 'node_modules/**',
       extensions: ['.js', '.ts'],
+      presets: [
+        [
+          '@babel/preset-env',
+          {
+            targets: {
+              node: '12.20'
+            }
+          },
+        ]
+      ]
     }),
   ],
 };
