@@ -39,13 +39,10 @@ ${packageJson?.description}`);
 
   registry(
     program,
-    /**
-     Filter out plugins commands that do not meet the requirements
-     */
     commands.concat(
-      // @ts-ignore
       ...outsideCommandConfigs
         .map((item) => item.registry)
+        // TODO: filter out the same command
         .reduce((accumulate, current) => accumulate.concat(current), [])
     )
   );
