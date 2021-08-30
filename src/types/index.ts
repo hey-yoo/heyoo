@@ -5,20 +5,16 @@ export interface command {
   action: actionFn;
   option?: string[][];
   requiredOption?: string[][];
-  argument?: string[];
+  argument?: string[][];
   description?: string;
 }
 
 export interface pluginsConfig {
-  name: string;
-  version: string;
   type: 'plugins';
   registry: command[];
 }
 
 export interface packConfig {
-  name: string;
-  version: string;
   type: 'packs';
   commands: string[];
 }
@@ -26,4 +22,19 @@ export interface packConfig {
 export interface projectConfig {
   type: 'project';
   packs: string;
+}
+
+export interface application {
+  plugins: {
+    registry: string[];
+    installed: string[];
+    linked: string[];
+  };
+  packs: {
+    linked: string[];
+  };
+  template: {
+    plugins: string[];
+    packs: string[];
+  };
 }
