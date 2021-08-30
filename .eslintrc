@@ -17,7 +17,6 @@
   ],
   "rules": {
     "comma-dangle": ["error", "only-multiline"],
-    "no-console": "warn",
     "arrow-spacing": ["error", { "before": true, "after": true }],
     "no-nested-ternary": "error",
     "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }],
