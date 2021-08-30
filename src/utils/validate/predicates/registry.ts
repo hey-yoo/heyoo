@@ -1,7 +1,5 @@
-import owDefault from 'ow';
+import ow from '../ow';
 import { RESERVED_WORD } from '../../../constants';
-// @ts-ignore
-const ow = owDefault.default;
 
 const registry = ow.array.ofType(
   ow.optional.object.partialShape({
@@ -11,7 +9,7 @@ const registry = ow.array.ofType(
     // optional
     option: ow.optional.array.ofType(ow.array.ofType(ow.string)),
     requiredOption: ow.optional.array.ofType(ow.array.ofType(ow.string)),
-    argument: ow.optional.array.ofType(ow.string),
+    argument: ow.optional.array.ofType(ow.array.ofType(ow.string)),
     description: ow.optional.string,
   })
 );

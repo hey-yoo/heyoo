@@ -1,6 +1,4 @@
-import owDefault from 'ow';
-// @ts-ignore
-const ow = owDefault.default;
+import ow from '../ow';
 
 const projectConfig = ow.object.partialShape({
   type: ow.string.equals('project'),
