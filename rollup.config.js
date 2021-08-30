@@ -14,6 +14,8 @@ const externalDeps = [
   'ow',
   'hey-yoo-utils',
   'file-url',
+  'chalk',
+  'prompts',
 ];
 
 const externalNode = ['path', 'fs', 'process'];
