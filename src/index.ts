@@ -27,7 +27,7 @@ ${packageJson?.description}`);
 
   let outsideCommandConfigs = (await getAllPluginsConfig()) as pluginsConfig[];
   outsideCommandConfigs = outsideCommandConfigs.filter((item) => {
-    const validateErr = validate(item, item.name, predicates.pluginsConfig);
+    const validateErr = validate(item, '', predicates.pluginsConfig);
     if (validateErr) {
       log(label.error, validateErr);
       return false;
