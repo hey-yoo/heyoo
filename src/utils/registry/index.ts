@@ -20,8 +20,9 @@ export default function registry(program: Command, commands: command[]) {
       });
     }
     if (Array.isArray(item.argument)) {
-      item.argument.forEach((arg) => {
-        _program = _program.argument(arg);
+      item.argument.forEach((opt) => {
+        const [flags, description, defaultValue] = opt;
+        _program = _program.argument(flags, description, defaultValue);
       });
     }
     if (item.description) {
