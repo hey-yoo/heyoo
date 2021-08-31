@@ -14,7 +14,7 @@ yarn-error.log*
 
 # Dependencies
 /node_modules
-/local
+/.local
 
 # rc
 /.husky
