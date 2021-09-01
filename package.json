@@ -1,5 +1,5 @@
 {
-  "name": "hey-yoo",
+  "name": "heyoo",
   "version": "1.0.0",
   "description": "",
   "bin": {
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hey-yoo/hey-yoo.git"
+    "url": "git+https://github.com/hey-yoo/heyoo.git"
   },
   "keywords": [
     "hey-yoo",
@@ -27,9 +27,9 @@
   "author": "Haolin",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hey-yoo/hey-yoo/issues"
+    "url": "https://github.com/hey-yoo/heyoo/issues"
   },
-  "homepage": "https://github.com/hey-yoo/hey-yoo#readme",
+  "homepage": "https://github.com/hey-yoo/heyoo#readme",
   "devDependencies": {
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
