@@ -13,6 +13,7 @@ export const { __dirname, __filename } = pathExtra.getGlobalPath(
   import.meta.url
 );
 export const basePath = path.resolve(__dirname, '../');
+export const pkgPath = path.resolve(basePath, PACKAGE);
 export const applicationPath = path.resolve(basePath, APPLICATION);
 export const localPath = path.resolve(basePath, LOCAL_PATH);
 export const localPluginsPath = path.resolve(localPath, PLUGINS);
