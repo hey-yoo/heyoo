@@ -1,7 +1,7 @@
 import ow from '../ow';
 import { RESERVED_WORD } from '../../../constants';
 
-const registry = ow.array.ofType(
+const command = ow.array.ofType(
   ow.optional.object.partialShape({
     // required
     command: ow.string.not.empty.lowercase.not.oneOf(RESERVED_WORD),
@@ -14,4 +14,4 @@ const registry = ow.array.ofType(
   })
 );
 
-export default registry;
+export default command;

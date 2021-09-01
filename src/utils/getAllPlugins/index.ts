@@ -41,7 +41,7 @@ export async function getAllPlugins(): Promise<command[]> {
       const validateErr = validate(
         item,
         text.orange('plugins'),
-        predicates.registry
+        predicates.command
       );
       if (validateErr) {
         log(label.error, validateErr);

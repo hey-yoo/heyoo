@@ -51,7 +51,7 @@ export default async function link() {
   const registryErr = validate(
     registry,
     text.orange(entryPath),
-    predicates.registry
+    predicates.command
   );
   if (registryErr) {
     return console.log(label.error, registryErr);

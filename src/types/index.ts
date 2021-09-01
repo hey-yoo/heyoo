@@ -9,16 +9,6 @@ export interface command {
   description?: string;
 }
 
-export interface pluginsConfig {
-  type: 'plugins';
-  registry: command[];
-}
-
-export interface packConfig {
-  type: 'packs';
-  commands: string[];
-}
-
 export interface projectConfig {
   type: 'project';
   packs: string;
