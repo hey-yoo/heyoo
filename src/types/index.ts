@@ -15,6 +15,7 @@ export interface projectConfig {
 }
 
 export interface application {
+  packageManager: 'npm' | 'pnpm' | 'yarn' | '';
   plugins: {
     registry: string[];
     installed: string[];

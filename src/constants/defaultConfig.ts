@@ -6,6 +6,7 @@ export const DEFAULT_PROJECT_CONFIG = {
 } as projectConfig;
 
 export const DEFAULT_APPLICATION = {
+  packageManager: '',
   plugins: {
     registry: [],
     installed: [],

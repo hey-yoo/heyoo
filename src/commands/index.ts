@@ -2,8 +2,17 @@ import { command } from '../types';
 import link from './link';
 import unlink from './unlink';
 import run from './run';
+import install from './install';
 
 const commands: command[] = [
+  {
+    command: 'install <plugins>',
+    action: install,
+    option: [
+      ['--git', 'download a git repository as a plugins'],
+    ],
+    description: 'install the npm package as a plugins'
+  },
   {
     command: 'link',
     action: link,

@@ -9,3 +9,5 @@ export const PLUGINS = 'plugins';
 
 export const APPLICATION = 'application.json';
 export const PACKAGE = 'package.json';
+
+export const PKG_MANAGER = ['npm', 'pnpm', 'yarn'];
