@@ -21,7 +21,7 @@ axios.defaults.timeout = 20 * 1000;
 async function installDeps(rootPath: string, packageManager: string) {
   const pkg = fsExtra.readJson(path.resolve(rootPath, PACKAGE));
   if (pkg && pkg.dependencies && Object.keys(pkg.dependencies).length > 0) {
-    const loading = ora(`install plugins dependencies...`).start();
+    const loading = ora(`install dependencies`).start();
 
     const isSuccess = await new Promise((resolve, reject) => {
       exec(`${packageManager} install`, {
@@ -38,9 +38,55 @@ async function installDeps(rootPath: string, packageManager: string) {
     });
 
     if (isSuccess) {
-      loading.succeed('dependencies install completed');
+      loading.succeed();
     }
   }
+}
+
+async function checkPkg(pkg: string) {
+  const loading = ora('check info').start();
+
+  const res = await axios({
+    method: 'get',
+    url: `https://registry.npmjs.org/${pkg}`,
+    responseType: 'json',
+  }).catch((err) => {
+    loading.stop().clear();
+    console.log(label.error, err.message, err?.response?.data || '');
+  });
+  if (!res || !res.data) {
+    return;
+  }
+
+  loading.succeed();
+  return res.data;
+}
+
+async function downloadPkg(pkgUrl) {
+  const dLoading = ora(`download`).start();
+
+  const fileRes = await axios({
+    method: 'get',
+    url: pkgUrl,
+    responseType: 'arraybuffer',
+  }).catch((err) => {
+    dLoading.stop().clear();
+    console.log(label.error, err.message, err?.response?.data || '');
+  });
+  if (!fileRes) {
+    return;
+  }
+
+  dLoading.succeed();
+  return fileRes.data;
+}
+
+async function unzip(input, output) {
+  const loading = ora('unzip').start();
+
+  await decompress(input, output);
+
+  loading.succeed();
 }
 
 async function installPkg(plugins: string, packageManager: string) {
@@ -50,52 +96,25 @@ async function installPkg(plugins: string, packageManager: string) {
     [name, version] = plugins.split('@');
   }
 
-  const fetchLoading = ora('fetching plugins info...').start();
-
-  const res = await axios({
-    method: 'get',
-    url: `https://registry.npmjs.org/${name}`,
-    responseType: 'json',
-    timeout: 20 * 1000,
-  }).catch((err) => {
-    fetchLoading.stop().clear();
-    console.log(label.error, err.message, err?.response?.data || '');
-  });
-  if (!res || !res.data) {
+  const pkg = await checkPkg(name);
+  if (!pkg) {
     return;
   }
-
-  fetchLoading.succeed('fetch info complete');
 
   if (!version) {
-    version = res.data['dist-tags'].latest;
+    version = pkg['dist-tags'].latest;
   }
-  const url = res.data.versions[version].dist.tarball;
+  const url = pkg.versions[version].dist.tarball;
 
-  const dLoading = ora(`downloading...`).start();
-
-  const fileRes = await axios({
-    method: 'get',
-    url,
-    responseType: 'arraybuffer',
-  }).catch((err) => {
-    dLoading.stop().clear();
-    console.log(label.error, err.message, err?.response?.data || '');
-  });
-  if (!fileRes || !fileRes.data) {
+  const pkgArrBuf = await downloadPkg(url);
+  if (!pkgArrBuf) {
     return;
   }
 
-  dLoading.succeed('download complete');
-
-  const unzipLoading = ora('unzipping...').start();
-
-  await decompress(Buffer.from(fileRes.data), localPluginsPath);
-
-  unzipLoading.succeed('unzip complete');
+  await unzip(Buffer.from(pkgArrBuf), localPluginsPath)
 
   const packagePath = path.resolve(localPluginsPath, 'package');
-  const pluginsPath = path.resolve(localPluginsPath, name)
+  const pluginsPath = path.resolve(localPluginsPath, name);
 
   fs.renameSync(packagePath, pluginsPath);
 
