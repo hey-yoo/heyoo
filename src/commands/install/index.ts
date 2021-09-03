@@ -16,6 +16,8 @@ const require = createRequire(import.meta.url);
 const download = require('download-git-repo');
 const decompress = require('decompress');
 
+axios.defaults.timeout = 20 * 1000;
+
 async function installDeps(rootPath: string, packageManager: string) {
   const pkg = fsExtra.readJson(path.resolve(rootPath, PACKAGE));
   if (pkg && pkg.dependencies && Object.keys(pkg.dependencies).length > 0) {
@@ -102,14 +104,36 @@ async function installPkg(plugins: string, packageManager: string) {
   console.log(label.success, text.green('plugins installation is complete'));
 }
 
-async function downloadGitRepo(plugins: string, packageManager: string) {
-  const pluginsPath = path.resolve(localPluginsPath, path.basename(plugins));
-  fsExtra.ensureDir(pluginsPath);
+async function checkGitRepo(repo: string) {
+  const loading = ora('checking git repo exist...').start();
 
+  const res = await axios({
+    method: 'get',
+    url: `https://api.github.com/repos/${repo}`,
+    responseType: 'json',
+  }).catch((err) => {
+    loading.stop().clear();
+    console.log(label.error, err.message, err?.response?.data || '');
+  });
+  if (!res || !res.data) {
+    return;
+  }
+
+  loading.succeed('check complete');
+
+  if (res.data.size === 0) {
+    console.log(label.warn, text.orange(`${repo} is an empty repo`));
+    return;
+  }
+
+  return res.data;
+}
+
+async function downloadGitRepo(repo: string, dest: string) {
   const loading = ora(`downloading git repo...`).start();
 
   const isSuccess = await new Promise((resolve, reject) => {
-    download(plugins, pluginsPath, (err) => {
+    download(repo, dest, (err) => {
       if (err) {
         reject(err);
       }
@@ -125,6 +149,22 @@ async function downloadGitRepo(plugins: string, packageManager: string) {
   }
 
   loading.succeed('download complete');
+  return true;
+}
+
+async function installGitRepo(plugins: string, packageManager: string) {
+  const repo = await checkGitRepo(plugins);
+  if (!repo) {
+    return;
+  }
+
+  const pluginsPath = path.resolve(localPluginsPath, repo.name);
+  fsExtra.ensureDir(pluginsPath);
+
+  const isDownload = await downloadGitRepo(plugins, pluginsPath);
+  if (!isDownload) {
+    return;
+  }
 
   await installDeps(pluginsPath, packageManager);
 
@@ -151,7 +191,7 @@ export default async function install(plugins: string, options) {
   fsExtra.ensureDir(localPluginsPath);
 
   if (options.git) {
-    downloadGitRepo(plugins, appJson.packageManager);
+    installGitRepo(plugins, appJson.packageManager);
   } else {
     installPkg(plugins, appJson.packageManager);
   }
