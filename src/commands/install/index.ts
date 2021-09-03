@@ -18,8 +18,8 @@ const decompress = require('decompress');
 
 axios.defaults.timeout = 20 * 1000;
 
-function logSuccess(plugins) {
-  console.log(label.success, `installed ${plugins}`);
+function logSuccess(plugins, version) {
+  console.log(label.success, `installed ${plugins}`, version);
 }
 
 async function installDeps(rootPath: string, packageManager: string) {
@@ -90,25 +90,18 @@ async function unzip(input, output) {
 
   loading.succeed();
 }
-async function installPkg(plugins: string, packageManager: string) {
-  let name = plugins;
-  let version;
-  if (plugins.includes('@')) {
-    [name, version] = plugins.split('@');
-  }
-
-  const pkg = await fetchPkg(name);
-  if (!pkg) {
+async function installPkg(pkg: string, version: string, packageManager: string) {
+  const pkgData = await fetchPkg(pkg);
+  if (!pkgData) {
     return;
+  }
+  if (!version) {
+    version = pkgData['dist-tags'].latest;
   }
 
   // TODO: 检查本地是否已安装该插件,如果已安装则需继续检查版本是否一致
 
-  if (!version) {
-    version = pkg['dist-tags'].latest;
-  }
-  const url = pkg.versions[version].dist.tarball;
-
+  const url = pkgData.versions[version].dist.tarball;
   const pkgArrBuf = await downloadPkg(url);
   if (!pkgArrBuf) {
     return;
@@ -117,13 +110,15 @@ async function installPkg(plugins: string, packageManager: string) {
   await unzip(Buffer.from(pkgArrBuf), localPluginsPath)
 
   const packagePath = path.resolve(localPluginsPath, 'package');
-  const pluginsPath = path.resolve(localPluginsPath, name);
+  const pluginsPath = path.resolve(localPluginsPath, pkg);
 
   fs.renameSync(packagePath, pluginsPath);
 
   await installDeps(pluginsPath, packageManager);
 
-  logSuccess(plugins);
+  // TODO: update application.json
+
+  logSuccess(pkg, version);
 }
 
 async function fetchGitRepo(repo: string) {
@@ -179,25 +174,30 @@ async function downloadGitRepo(repo: string, dest: string) {
   loading.succeed();
   return true;
 }
-async function installGitRepo(plugins: string, packageManager: string) {
-  const pkgJson = await fetchGitRepo(plugins);
+async function installGitRepo(repo: string, version: string, packageManager: string) {
+  const pkgJson = await fetchGitRepo(repo);
   if (!pkgJson) {
     return;
   }
+  if (!version) {
+    version = pkgJson.version;
+  }
 
-  // TODO: 检查本地是否已安装该插件,如果已安装则需继续检查版本是否一致
+  // TODO: 检查本地是否已安装该插件
 
-  const pluginsPath = path.resolve(localPluginsPath, pkgJson.name);
-  fsExtra.ensureDir(pluginsPath);
+  const outputPath = path.resolve(localPluginsPath, pkgJson.name);
+  fsExtra.ensureDir(outputPath);
 
-  const isDownload = await downloadGitRepo(plugins, pluginsPath);
+  const isDownload = await downloadGitRepo(repo, outputPath);
   if (!isDownload) {
     return;
   }
 
-  await installDeps(pluginsPath, packageManager);
+  await installDeps(outputPath, packageManager);
 
-  logSuccess(plugins);
+  // TODO: update application.json
+
+  logSuccess(repo, version);
 }
 
 export default async function install(plugins: string, options) {
@@ -219,9 +219,15 @@ export default async function install(plugins: string, options) {
   fsExtra.ensureDir(localPath);
   fsExtra.ensureDir(localPluginsPath);
 
+  let name = plugins;
+  let version;
+  if (plugins.includes('@')) {
+    [name, version] = plugins.split('@');
+  }
+
   if (options.git) {
-    installGitRepo(plugins, appJson.packageManager);
+    installGitRepo(name, '', appJson.packageManager);
   } else {
-    installPkg(plugins, appJson.packageManager);
+    installPkg(name, version, appJson.packageManager);
   }
 }
