@@ -2,26 +2,27 @@ import { command } from '../types';
 import link from './link';
 import unlink from './unlink';
 import run from './run';
-import { text } from 'std-terminal-logger';
 
-const commands = [
+const commands: command[] = [
   {
     command: 'link',
     action: link,
+    description: 'makes the current local plugins or packs accessible',
   },
   {
     command: 'unlink',
     action: unlink,
+    description: 'unlink the local plugins or packs',
   },
   {
     command: 'run',
     action: run,
     option: [
-      ['-d, --debug', 'run customize command  with [debug] mode'],
+      ['-d, --debug', 'run with [debug] mode'],
       ['--preset [keys]', 'command preset key list'],
     ],
-    description: text.purple('run customize command'),
+    description: 'run packs command',
   },
-] as command[];
+];
 
 export default commands;
