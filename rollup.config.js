@@ -16,9 +16,20 @@ const externalDeps = [
   'file-url',
   'chalk',
   'prompts',
+  'ora',
+  'axios',
+  'decompress',
 ];
 
-const externalNode = ['path', 'fs', 'process'];
+const externalNode = [
+  'path',
+  'fs',
+  'process',
+  'module',
+  'buffer',
+  'child_process',
+  'zlib',
+];
 
 module.exports = {
   input: resolve('./src/index.ts'),
