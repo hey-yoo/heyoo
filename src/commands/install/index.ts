@@ -47,7 +47,7 @@ async function installDeps(rootPath: string, packageManager: string) {
   }
 }
 
-async function checkPkg(pkg: string) {
+async function fetchPkg(pkg: string) {
   const loading = ora('check info').start();
 
   const res = await axios({
@@ -97,10 +97,12 @@ async function installPkg(plugins: string, packageManager: string) {
     [name, version] = plugins.split('@');
   }
 
-  const pkg = await checkPkg(name);
+  const pkg = await fetchPkg(name);
   if (!pkg) {
     return;
   }
+
+  // TODO: 检查本地是否已安装该插件,如果已安装则需继续检查版本是否一致
 
   if (!version) {
     version = pkg['dist-tags'].latest;
@@ -124,12 +126,12 @@ async function installPkg(plugins: string, packageManager: string) {
   logSuccess(plugins);
 }
 
-async function checkGitRepo(repo: string) {
-  const loading = ora('check info').start();
+async function fetchGitRepo(repo: string) {
+  const loading = ora('fetch info').start();
 
   const res = await axios({
     method: 'get',
-    url: `https://api.github.com/repos/${repo}`,
+    url: `https://api.github.com/repos/${repo}/contents/package.json`,
     responseType: 'json',
   }).catch((err) => {
     loading.stop().clear();
@@ -141,12 +143,19 @@ async function checkGitRepo(repo: string) {
 
   loading.succeed();
 
-  if (res.data.size === 0) {
-    console.log(label.warn, text.orange(`${repo} is an empty repo`));
+  if (!res.data.content) {
+    console.log(label.warn, text.orange('this repo is empty or no package.json file'));
     return;
   }
 
-  return res.data;
+  const pkgJson = JSON.parse(Buffer.from(res.data.content, res.data.encoding).toString());
+
+  if (!pkgJson.name || !pkgJson.version) {
+    console.log(label.warn, text.orange('package.json must had these attributes(name, version)'));
+    return;
+  }
+
+  return pkgJson;
 }
 async function downloadGitRepo(repo: string, dest: string) {
   const loading = ora(`download`).start();
@@ -171,12 +180,14 @@ async function downloadGitRepo(repo: string, dest: string) {
   return true;
 }
 async function installGitRepo(plugins: string, packageManager: string) {
-  const repo = await checkGitRepo(plugins);
-  if (!repo) {
+  const pkgJson = await fetchGitRepo(plugins);
+  if (!pkgJson) {
     return;
   }
 
-  const pluginsPath = path.resolve(localPluginsPath, repo.name);
+  // TODO: 检查本地是否已安装该插件,如果已安装则需继续检查版本是否一致
+
+  const pluginsPath = path.resolve(localPluginsPath, pkgJson.name);
   fsExtra.ensureDir(pluginsPath);
 
   const isDownload = await downloadGitRepo(plugins, pluginsPath);
