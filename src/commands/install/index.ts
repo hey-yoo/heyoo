@@ -18,6 +18,10 @@ const decompress = require('decompress');
 
 axios.defaults.timeout = 20 * 1000;
 
+function logSuccess(plugins) {
+  console.log(label.success, `installed ${plugins}`);
+}
+
 async function installDeps(rootPath: string, packageManager: string) {
   const pkg = fsExtra.readJson(path.resolve(rootPath, PACKAGE));
   if (pkg && pkg.dependencies && Object.keys(pkg.dependencies).length > 0) {
@@ -61,7 +65,6 @@ async function checkPkg(pkg: string) {
   loading.succeed();
   return res.data;
 }
-
 async function downloadPkg(pkgUrl) {
   const dLoading = ora(`download`).start();
 
@@ -80,7 +83,6 @@ async function downloadPkg(pkgUrl) {
   dLoading.succeed();
   return fileRes.data;
 }
-
 async function unzip(input, output) {
   const loading = ora('unzip').start();
 
@@ -88,7 +90,6 @@ async function unzip(input, output) {
 
   loading.succeed();
 }
-
 async function installPkg(plugins: string, packageManager: string) {
   let name = plugins;
   let version;
@@ -120,11 +121,11 @@ async function installPkg(plugins: string, packageManager: string) {
 
   await installDeps(pluginsPath, packageManager);
 
-  console.log(label.success, text.green('plugins installation is complete'));
+  logSuccess(plugins);
 }
 
 async function checkGitRepo(repo: string) {
-  const loading = ora('checking git repo exist...').start();
+  const loading = ora('check info').start();
 
   const res = await axios({
     method: 'get',
@@ -138,7 +139,7 @@ async function checkGitRepo(repo: string) {
     return;
   }
 
-  loading.succeed('check complete');
+  loading.succeed();
 
   if (res.data.size === 0) {
     console.log(label.warn, text.orange(`${repo} is an empty repo`));
@@ -147,9 +148,8 @@ async function checkGitRepo(repo: string) {
 
   return res.data;
 }
-
 async function downloadGitRepo(repo: string, dest: string) {
-  const loading = ora(`downloading git repo...`).start();
+  const loading = ora(`download`).start();
 
   const isSuccess = await new Promise((resolve, reject) => {
     download(repo, dest, (err) => {
@@ -167,10 +167,9 @@ async function downloadGitRepo(repo: string, dest: string) {
     return;
   }
 
-  loading.succeed('download complete');
+  loading.succeed();
   return true;
 }
-
 async function installGitRepo(plugins: string, packageManager: string) {
   const repo = await checkGitRepo(plugins);
   if (!repo) {
@@ -187,7 +186,7 @@ async function installGitRepo(plugins: string, packageManager: string) {
 
   await installDeps(pluginsPath, packageManager);
 
-  console.log(label.success, text.green('plugins installation is complete'));
+  logSuccess(plugins);
 }
 
 export default async function install(plugins: string, options) {
