@@ -27,22 +27,28 @@ export async function getAllPlugins(): Promise<command[]> {
       const lStats = fs.lstatSync(linkPath);
       if (lStats.isSymbolicLink()) {
         const actualPath = fs.readlinkSync(linkPath);
-        const pkg = fsExtra.readJson(path.resolve(actualPath, PACKAGE));
-        if (pkg && pkg.exports) {
-          const actualPkgPath = path.resolve(actualPath, pkg.exports);
-          if (fs.existsSync(actualPkgPath)) {
-            return {
-              name: item,
-              path: actualPkgPath,
-            };
-          }
-        }
+        return {
+          name: item,
+          path: actualPath,
+        };
       }
       return false;
     })
     .filter(Boolean) as plugins[];
 
-  const pluginsPaths = [...installed, ...linked];
+  const pluginsPaths = [...installed, ...linked].map((item) => {
+    const pkg = fsExtra.readJson(path.resolve(item.path, PACKAGE));
+    if (pkg && pkg.exports) {
+      const actualPkgPath = path.resolve(item.path, pkg.exports);
+      if (fs.existsSync(actualPkgPath)) {
+        return {
+          name: item.name,
+          path: actualPkgPath,
+        };
+      }
+    }
+    return false;
+  }).filter(Boolean) as plugins[];
 
   const all = await Promise.all(
     pluginsPaths.map((item) => import(fileUrl(item.path)))
