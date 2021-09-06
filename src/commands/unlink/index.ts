@@ -40,7 +40,7 @@ export default async function unlink() {
         console.log(
           label.green('UNLINKED'),
           `${text.white('[')}${text.blueGray(type)}${text.white(']')}`,
-          text.blue(`${pkg.name}`),
+          text.blue(pkg.name),
           text.white(pkg.version)
         );
 

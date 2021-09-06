@@ -260,7 +260,7 @@ export default async function install(plugins: string, options) {
     console.log(
       label.green('INSTALLED'),
       `${text.white('[')}${text.blueGray('plugins')}${text.white(']')}`,
-      text.blue(`${newPlugins.name}`),
+      text.blue(newPlugins.name),
       text.white(newPlugins.version)
     );
   }

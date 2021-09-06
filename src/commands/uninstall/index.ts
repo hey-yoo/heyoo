@@ -10,6 +10,7 @@ export default async function uninstall(plugins: string) {
   const index = appJson.plugins.installed.findIndex(item => item.name === plugins);
   if (index > -1) {
     const waitUninstallPlugins = appJson.plugins.installed[index];
+    /* FIXME: pnpm安装的包会已link的形式存在，fsExtra.remove会报错 */
     fsExtra.remove(path.resolve(localPluginsPath, waitUninstallPlugins.name));
 
     const version = waitUninstallPlugins.version;
@@ -20,7 +21,7 @@ export default async function uninstall(plugins: string) {
     console.log(
       label.green('UNINSTALLED'),
       `${text.white('[')}${text.blueGray('plugins')}${text.white(']')}`,
-      text.blue(`${plugins}`),
+      text.blue(plugins),
       text.white(version)
     );
   } else {

@@ -94,7 +94,7 @@ export default async function link() {
     console.log(
       label.green('LINKED'),
       `${text.white('[')}${text.blueGray(type)}${text.white(']')}`,
-      text.blue(`${pkg.name}`),
+      text.blue(pkg.name),
       text.white(pkg.version)
     );
   });
