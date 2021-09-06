@@ -27,7 +27,7 @@ export default async function unlink() {
   let type;
   const types = [PLUGINS, PACKS];
   for (type of types) {
-    if (appJson[type].linked.includes(pkg.name)) {
+    if (appJson[type].linked.find(item => item.name === pkg.name)) {
       break;
     }
   }
@@ -38,14 +38,14 @@ export default async function unlink() {
       if (stats.isSymbolicLink()) {
         fs.unlinkSync(pluginsLinkPath);
         console.log(
-          label.green('UNLINK COMPLETED'),
+          label.green('UNLINKED'),
           `${text.white('[')}${text.blueGray(type)}${text.white(']')}`,
           text.blue(`${pkg.name}`),
           text.white(pkg.version)
         );
 
         appJson[type].linked = appJson[type].linked.filter(
-          (item) => item !== pkg.name
+          (item) => item.name !== pkg.name
         );
         setApplication(appJson);
         return;

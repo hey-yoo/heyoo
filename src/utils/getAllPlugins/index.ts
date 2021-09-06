@@ -9,7 +9,7 @@ import { getApplication } from '../application';
 import { localPluginsPath } from '../path';
 import { label, log, text } from 'std-terminal-logger';
 
-interface plugins {
+interface localItem {
   name: string;
   path: string;
 }
@@ -17,24 +17,24 @@ interface plugins {
 export async function getAllPlugins(): Promise<command[]> {
   const appJson = getApplication();
 
-  const installed: plugins[] = appJson.plugins.installed.map((item) => ({
+  const installed: localItem[] = appJson.plugins.installed.map((item) => ({
     name: item.name,
     path: path.resolve(localPluginsPath, item.name),
   }));
   const linked = appJson.plugins.linked
     .map((item) => {
-      const linkPath = path.resolve(localPluginsPath, item);
+      const linkPath = path.resolve(localPluginsPath, item.name);
       const lStats = fs.lstatSync(linkPath);
       if (lStats.isSymbolicLink()) {
         const actualPath = fs.readlinkSync(linkPath);
         return {
-          name: item,
+          name: item.name,
           path: actualPath,
         };
       }
       return false;
     })
-    .filter(Boolean) as plugins[];
+    .filter(Boolean) as localItem[];
 
   const pluginsPaths = [...installed, ...linked].map((item) => {
     const pkg = fsExtra.readJson(path.resolve(item.path, PACKAGE));
@@ -48,7 +48,7 @@ export async function getAllPlugins(): Promise<command[]> {
       }
     }
     return false;
-  }).filter(Boolean) as plugins[];
+  }).filter(Boolean) as localItem[];
 
   const all = await Promise.all(
     pluginsPaths.map((item) => import(fileUrl(item.path)))

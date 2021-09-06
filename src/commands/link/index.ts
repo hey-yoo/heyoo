@@ -84,12 +84,15 @@ export default async function link() {
 
     let appJson = getApplication();
     if (appJson[type].linked.indexOf(pkg.name) === -1) {
-      appJson[type].linked.push(pkg.name);
+      appJson[type].linked.push({
+        name: pkg.name,
+        version: pkg.version,
+      });
       setApplication(appJson);
     }
 
     console.log(
-      label.green('LINK COMPLETED'),
+      label.green('LINKED'),
       `${text.white('[')}${text.blueGray(type)}${text.white(']')}`,
       text.blue(`${pkg.name}`),
       text.white(pkg.version)
