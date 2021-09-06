@@ -11,7 +11,7 @@ import axios from 'axios';
 import { getApplication, setApplication } from '../../utils/application';
 import { PACKAGE, PKG_MANAGER } from '../../constants';
 import { localPath, localPluginsPath } from '../../utils/path';
-import { installedPlugins } from '../../types';
+import { installed } from '../../types';
 
 const require = createRequire(import.meta.url);
 const download = require('download-git-repo');
@@ -87,7 +87,7 @@ async function unzip(input, output) {
 
   loading.succeed();
 }
-async function installPkg(pkg: string, version: string, packageManager: string): Promise<installedPlugins | undefined> {
+async function installPkg(pkg: string, version: string, packageManager: string): Promise<installed | undefined> {
   const pkgData = await fetchPkg(pkg);
   if (!pkgData) {
     return;
@@ -188,7 +188,7 @@ async function downloadGitRepo(repo: string, dest: string) {
   loading.succeed();
   return true;
 }
-async function installGitRepo(repo: string, version: string, packageManager: string): Promise<installedPlugins | undefined> {
+async function installGitRepo(repo: string, version: string, packageManager: string): Promise<installed | undefined> {
   const pkgJson = await fetchGitRepo(repo);
   if (!pkgJson) {
     return;
