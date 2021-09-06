@@ -7,4 +7,5 @@ export const RESERVED_WORD = [
   'link',
   'unlink',
   'install',
+  'uninstall',
 ] as string[];

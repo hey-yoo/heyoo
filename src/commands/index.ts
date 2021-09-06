@@ -3,6 +3,7 @@ import link from './link';
 import unlink from './unlink';
 import run from './run';
 import install from './install';
+import uninstall from './uninstall';
 
 const commands: command[] = [
   {
@@ -12,6 +13,11 @@ const commands: command[] = [
       ['--git', 'download a git repository as a plugins'],
     ],
     description: 'install the npm package as a plugins'
+  },
+  {
+    command: 'uninstall <plugins>',
+    action: uninstall,
+    description: 'uninstall the local plugins'
   },
   {
     command: 'link',
