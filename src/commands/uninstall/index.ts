@@ -2,7 +2,7 @@ import { getApplication, setApplication } from '../../utils/application';
 import { fsExtra } from 'hey-yoo-utils';
 import path from 'path';
 import { localPluginsPath } from '../../utils/path';
-import { label } from 'std-terminal-logger';
+import { label, text } from 'std-terminal-logger';
 
 export default async function uninstall(plugins: string) {
   let appJson = getApplication();
@@ -17,7 +17,12 @@ export default async function uninstall(plugins: string) {
     appJson.plugins.installed.splice(index, 1);
     setApplication(appJson);
 
-    console.log(label.success, `installed ${plugins}`, version);
+    console.log(
+      label.green('UNINSTALLED'),
+      `${text.white('[')}${text.blueGray('plugins')}${text.white(']')}`,
+      text.blue(`${plugins}`),
+      text.white(version)
+    );
   } else {
     console.log(label.warn, `Can't find the [plugins] ${plugins}`);
   }

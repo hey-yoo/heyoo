@@ -17,7 +17,7 @@ export interface projectConfig {
 export interface installedPlugins {
   name: string;
   version: string;
-  installationMethod: 'npm' | 'git';
+  repo?: string;
 }
 
 export interface application {

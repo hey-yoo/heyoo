@@ -19,10 +19,6 @@ const decompress = require('decompress');
 
 axios.defaults.timeout = 20 * 1000;
 
-function logSuccess(plugins, version) {
-  console.log(label.success, `installed ${plugins}`, version);
-}
-
 async function installDeps(rootPath: string, packageManager: string) {
   const pkg = fsExtra.readJson(path.resolve(rootPath, PACKAGE));
   if (pkg && pkg.dependencies && Object.keys(pkg.dependencies).length > 0) {
@@ -120,7 +116,6 @@ async function installPkg(pkg: string, version: string, packageManager: string):
   return {
     name: pkg,
     version,
-    installationMethod: 'npm',
   };
 }
 
@@ -215,9 +210,9 @@ async function installGitRepo(repo: string, version: string, packageManager: str
   await installDeps(outputPath, packageManager);
 
   return {
-    name: repo,
+    name: pkgJson.name,
     version,
-    installationMethod: 'git',
+    repo,
   };
 }
 
@@ -262,6 +257,11 @@ export default async function install(plugins: string, options) {
     }
     setApplication(appJson);
 
-    logSuccess(newPlugins.name, newPlugins.version);
+    console.log(
+      label.green('INSTALLED'),
+      `${text.white('[')}${text.blueGray('plugins')}${text.white(']')}`,
+      text.blue(`${newPlugins.name}`),
+      text.white(newPlugins.version)
+    );
   }
 }
