@@ -4,6 +4,7 @@ import unlink from './unlink';
 import run from './run';
 import install from './install';
 import uninstall from './uninstall';
+import list from './list';
 
 const commands: command[] = [
   {
@@ -18,6 +19,11 @@ const commands: command[] = [
     command: 'uninstall <plugins>',
     action: uninstall,
     description: 'uninstall the local plugins'
+  },
+  {
+    command: 'list',
+    action: list,
+    description: 'get the list of local plugins and packs',
   },
   {
     command: 'link',
