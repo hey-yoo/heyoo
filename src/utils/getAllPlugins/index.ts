@@ -18,8 +18,8 @@ export async function getAllPlugins(): Promise<command[]> {
   const appJson = getApplication();
 
   const installed: plugins[] = appJson.plugins.installed.map((item) => ({
-    name: item,
-    path: path.resolve(localPluginsPath, item),
+    name: item.name,
+    path: path.resolve(localPluginsPath, item.name),
   }));
   const linked = appJson.plugins.linked
     .map((item) => {

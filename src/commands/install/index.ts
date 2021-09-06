@@ -11,6 +11,7 @@ import axios from 'axios';
 import { getApplication, setApplication } from '../../utils/application';
 import { PACKAGE, PKG_MANAGER } from '../../constants';
 import { localPath, localPluginsPath } from '../../utils/path';
+import { installedPlugins } from '../../types';
 
 const require = createRequire(import.meta.url);
 const download = require('download-git-repo');
@@ -90,7 +91,7 @@ async function unzip(input, output) {
 
   loading.succeed();
 }
-async function installPkg(pkg: string, version: string, packageManager: string) {
+async function installPkg(pkg: string, version: string, packageManager: string): Promise<installedPlugins | undefined> {
   const pkgData = await fetchPkg(pkg);
   if (!pkgData) {
     return;
@@ -116,9 +117,11 @@ async function installPkg(pkg: string, version: string, packageManager: string) 
 
   await installDeps(pluginsPath, packageManager);
 
-  // TODO: update application.json
-
-  logSuccess(pkg, version);
+  return {
+    name: pkg,
+    version,
+    installationMethod: 'npm',
+  };
 }
 
 async function fetchGitRepo(repo: string) {
@@ -126,7 +129,7 @@ async function fetchGitRepo(repo: string) {
 
   const res = await axios({
     method: 'get',
-    url: `https://api.github.com/repos/${repo}/contents/package.json`,
+    url: `https://api.github.com/repos/${repo}`,
     responseType: 'json',
   }).catch((err) => {
     loading.stop().clear();
@@ -136,14 +139,30 @@ async function fetchGitRepo(repo: string) {
     return;
   }
 
-  loading.succeed();
+  if (!res.data.size) {
+    console.log(label.warn, text.orange('this repo is empty'));
+  }
 
-  if (!res.data.content) {
-    console.log(label.warn, text.orange('this repo is empty or no package.json file'));
+  const resPkg = await axios({
+    method: 'get',
+    url: `https://api.github.com/repos/${repo}/contents/package.json`,
+    responseType: 'json',
+  }).catch((err) => {
+    loading.stop().clear();
+    console.log(label.error, err.message, err?.response?.data || '');
+  });
+  if (!resPkg || !resPkg.data) {
     return;
   }
 
-  const pkgJson = JSON.parse(Buffer.from(res.data.content, res.data.encoding).toString());
+  if (!resPkg.data.content) {
+    console.log(label.warn, text.orange(`this repo don't have package.json file`));
+    return;
+  }
+
+  loading.succeed();
+
+  const pkgJson = JSON.parse(Buffer.from(resPkg.data.content, resPkg.data.encoding).toString());
 
   if (!pkgJson.name || !pkgJson.version) {
     console.log(label.warn, text.orange('package.json must had these attributes(name, version)'));
@@ -174,7 +193,7 @@ async function downloadGitRepo(repo: string, dest: string) {
   loading.succeed();
   return true;
 }
-async function installGitRepo(repo: string, version: string, packageManager: string) {
+async function installGitRepo(repo: string, version: string, packageManager: string): Promise<installedPlugins | undefined> {
   const pkgJson = await fetchGitRepo(repo);
   if (!pkgJson) {
     return;
@@ -195,9 +214,11 @@ async function installGitRepo(repo: string, version: string, packageManager: str
 
   await installDeps(outputPath, packageManager);
 
-  // TODO: update application.json
-
-  logSuccess(repo, version);
+  return {
+    name: repo,
+    version,
+    installationMethod: 'git',
+  };
 }
 
 export default async function install(plugins: string, options) {
@@ -225,9 +246,22 @@ export default async function install(plugins: string, options) {
     [name, version] = plugins.split('@');
   }
 
+  let newPlugins;
   if (options.git) {
-    installGitRepo(name, '', appJson.packageManager);
+    newPlugins = await installGitRepo(name, '', appJson.packageManager);
   } else {
-    installPkg(name, version, appJson.packageManager);
+    newPlugins = await installPkg(name, version, appJson.packageManager);
+  }
+
+  if (newPlugins) {
+    const oldPluginsIndex = appJson.plugins.installed.findIndex(item => item.name === newPlugins.name);
+    if (oldPluginsIndex > -1) {
+      appJson.plugins.installed[oldPluginsIndex] = newPlugins;
+    } else {
+      appJson.plugins.installed.push(newPlugins);
+    }
+    setApplication(appJson);
+
+    logSuccess(newPlugins.name, newPlugins.version);
   }
 }

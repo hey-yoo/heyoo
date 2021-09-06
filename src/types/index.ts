@@ -14,11 +14,17 @@ export interface projectConfig {
   packs: string;
 }
 
+export interface installedPlugins {
+  name: string;
+  version: string;
+  installationMethod: 'npm' | 'git';
+}
+
 export interface application {
   packageManager: 'npm' | 'pnpm' | 'yarn' | '';
   plugins: {
     registry: string[];
-    installed: string[];
+    installed: installedPlugins[];
     linked: string[];
   };
   packs: {
