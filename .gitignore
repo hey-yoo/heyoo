@@ -18,6 +18,7 @@ yarn-error.log*
 /dist
 /bin
 /.local
+application.json
 
 # env
 .env.local

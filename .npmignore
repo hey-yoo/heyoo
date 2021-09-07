@@ -32,3 +32,4 @@ yarn-error.log*
 pnpm-lock.yaml
 rollup.config.js
 tsconfig.json
+application.json
