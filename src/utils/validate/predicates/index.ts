@@ -1,9 +1,9 @@
 import packageJson from './packageJson';
-import projectConfig from './projectConfig';
+import heyConfig from './heyConfig';
 import command from './command';
 
 export default {
   packageJson,
-  projectConfig,
+  heyConfig,
   command,
 };

@@ -1,11 +1,11 @@
-import { projectConfig, application } from '../types';
+import { application, heyConfig } from '../types';
 
-export const DEFAULT_PROJECT_CONFIG = {
-  type: 'project',
+export const DEFAULT_HEY_CONFIG: heyConfig = {
   packs: '',
-} as projectConfig;
+  register: [],
+};
 
-export const DEFAULT_APPLICATION = {
+export const DEFAULT_APPLICATION: application = {
   packageManager: '',
   plugins: [],
   packs: [],
@@ -13,4 +13,4 @@ export const DEFAULT_APPLICATION = {
     plugins: [],
     packs: [],
   },
-} as application;
+};

@@ -9,11 +9,6 @@ export interface command {
   description?: string;
 }
 
-export interface projectConfig {
-  type: 'project';
-  packs: string;
-}
-
 export interface packs {
   name: string;
   version: string;
@@ -32,4 +27,15 @@ export interface application {
     plugins: string[];
     packs: string[];
   };
+}
+
+export interface register {
+  script: string;
+  subprocess?: boolean;
+  watch?: string;
+}
+
+export interface heyConfig {
+  packs: string;
+  register: register[],
 }
