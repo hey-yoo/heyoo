@@ -11,7 +11,7 @@ import axios from 'axios';
 import { getApplication, setApplication } from '../../utils/application';
 import { PACKAGE, PKG_MANAGER } from '../../constants';
 import { localPath, localPluginsPath } from '../../utils/path';
-import { application, installed } from '../../types';
+import { application, plugins } from '../../types';
 
 const require = createRequire(import.meta.url);
 const download = require('download-git-repo');
@@ -88,7 +88,7 @@ async function unzip(input, output) {
 
   loading.succeed();
 }
-async function installPkg(pkg: string, version: string, appJson: application): Promise<installed | undefined> {
+async function installPkg(pkg: string, version: string, appJson: application): Promise<plugins | undefined> {
   const pkgData = await fetchPkg(pkg);
   if (!pkgData) {
     return;
@@ -99,14 +99,14 @@ async function installPkg(pkg: string, version: string, appJson: application): P
 
   const outputPath = path.resolve(localPluginsPath, pkg);
 
-  const installed = appJson.plugins.installed.find(item => item.name === pkg);
-  if (installed) {
-    if (installed.version === version) {
+  const existPlugins = appJson.plugins.find(item => item.name === pkg);
+  if (existPlugins) {
+    if (existPlugins.version === version) {
       console.log(
         label.warn,
         text.blue(pkg),
         text.white(version),
-        'is already installed'
+        `is already ${existPlugins.type}ed`
       );
       return;
     }
@@ -129,6 +129,7 @@ async function installPkg(pkg: string, version: string, appJson: application): P
   return {
     name: pkg,
     version,
+    type: 'install',
   };
 }
 
@@ -201,7 +202,7 @@ async function downloadGitRepo(repo: string, dest: string) {
   loading.succeed();
   return true;
 }
-async function installGitRepo(repo: string, version: string, appJson: application): Promise<installed | undefined> {
+async function installGitRepo(repo: string, version: string, appJson: application): Promise<plugins | undefined> {
   const pkgJson = await fetchGitRepo(repo);
   if (!pkgJson) {
     return;
@@ -212,14 +213,14 @@ async function installGitRepo(repo: string, version: string, appJson: applicatio
 
   const outputPath = path.resolve(localPluginsPath, pkgJson.name);
 
-  const installed = appJson.plugins.installed.find(item => item.name === repo);
-  if (installed) {
-    if (installed.version === version) {
+  const existPlugins = appJson.plugins.find(item => item.name === repo);
+  if (existPlugins) {
+    if (existPlugins.version === version) {
       console.log(
         label.warn,
         text.blue(repo),
         text.white(version),
-        'is already installed'
+        `is already ${existPlugins.type}ed`
       );
       return;
     }
@@ -239,6 +240,7 @@ async function installGitRepo(repo: string, version: string, appJson: applicatio
     name: pkgJson.name,
     version,
     repo,
+    type: 'install',
   };
 }
 
@@ -275,11 +277,11 @@ export default async function install(plugins: string, options) {
   }
 
   if (newPlugins) {
-    const oldPluginsIndex = appJson.plugins.installed.findIndex(item => item.name === newPlugins.name);
+    const oldPluginsIndex = appJson.plugins.findIndex(item => item.name === newPlugins.name);
     if (oldPluginsIndex > -1) {
-      appJson.plugins.installed[oldPluginsIndex] = newPlugins;
+      appJson.plugins[oldPluginsIndex] = newPlugins;
     } else {
-      appJson.plugins.installed.push(newPlugins);
+      appJson.plugins.push(newPlugins);
     }
     setApplication(appJson);
 

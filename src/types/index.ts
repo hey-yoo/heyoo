@@ -14,25 +14,20 @@ export interface projectConfig {
   packs: string;
 }
 
-export interface linked {
+export interface packs {
   name: string;
   version: string;
+  type: 'install' | 'link';
 }
 
-export interface installed extends linked {
+export interface plugins extends packs {
   repo?: string;
 }
 
 export interface application {
   packageManager: 'npm' | 'pnpm' | 'yarn' | '';
-  plugins: {
-    registry: string[];
-    installed: installed[];
-    linked: linked[];
-  };
-  packs: {
-    linked: linked[];
-  };
+  plugins: plugins[];
+  packs: packs[];
   template: {
     plugins: string[];
     packs: string[];

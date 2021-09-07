@@ -7,14 +7,8 @@ export const DEFAULT_PROJECT_CONFIG = {
 
 export const DEFAULT_APPLICATION = {
   packageManager: '',
-  plugins: {
-    registry: [],
-    installed: [],
-    linked: [],
-  },
-  packs: {
-    linked: [],
-  },
+  plugins: [],
+  packs: [],
   template: {
     plugins: [],
     packs: [],

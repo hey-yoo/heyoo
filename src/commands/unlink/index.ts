@@ -25,9 +25,9 @@ export default async function unlink() {
   let appJson = getApplication();
 
   let type;
-  const types = [PLUGINS, PACKS];
+  const types = [PLUGINS, PACKS, ''];
   for (type of types) {
-    if (appJson[type].linked.find(item => item.name === pkg.name)) {
+    if (appJson[type].find(item => item.name === pkg.name && item.type === 'link')) {
       break;
     }
   }
@@ -44,7 +44,7 @@ export default async function unlink() {
           text.white(pkg.version)
         );
 
-        appJson[type].linked = appJson[type].linked.filter(
+        appJson[type] = appJson[type].filter(
           (item) => item.name !== pkg.name
         );
         setApplication(appJson);

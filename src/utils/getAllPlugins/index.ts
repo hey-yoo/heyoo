@@ -17,26 +17,29 @@ interface localItem {
 export async function getAllPlugins(): Promise<command[]> {
   const appJson = getApplication();
 
-  const installed: localItem[] = appJson.plugins.installed.map((item) => ({
-    name: item.name,
-    path: path.resolve(localPluginsPath, item.name),
-  }));
-  const linked = appJson.plugins.linked
+  const localPlugins: localItem[] = appJson.plugins
     .map((item) => {
-      const linkPath = path.resolve(localPluginsPath, item.name);
-      const lStats = fs.lstatSync(linkPath);
-      if (lStats.isSymbolicLink()) {
-        const actualPath = fs.readlinkSync(linkPath);
+      if (item.type === 'install') {
         return {
           name: item.name,
-          path: actualPath,
+          path: path.resolve(localPluginsPath, item.name),
         };
+      } else {
+        const linkPath = path.resolve(localPluginsPath, item.name);
+        const lStats = fs.lstatSync(linkPath);
+        if (lStats.isSymbolicLink()) {
+          const actualPath = fs.readlinkSync(linkPath);
+          return {
+            name: item.name,
+            path: actualPath,
+          };
+        }
       }
       return false;
     })
     .filter(Boolean) as localItem[];
 
-  const pluginsPaths = [...installed, ...linked].map((item) => {
+  const pluginsPaths = localPlugins.map((item) => {
     const pkg = fsExtra.readJson(path.resolve(item.path, PACKAGE));
     if (pkg && pkg.exports) {
       const actualPkgPath = path.resolve(item.path, pkg.exports);

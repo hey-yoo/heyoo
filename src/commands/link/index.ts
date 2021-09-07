@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import prompts from 'prompts';
+import { createRequire } from 'module';
 import { PACKS, PLUGINS } from '../../constants';
 import {
   currentPath,
@@ -14,6 +15,9 @@ import { predicates, validate } from '../../utils/validate';
 import { label, text } from 'std-terminal-logger';
 import fileUrl from 'file-url';
 import { getApplication, setApplication } from '../../utils/application';
+
+const require = createRequire(import.meta.url);
+const rimraf = require('rimraf');
 
 export default async function link() {
   const { type } = await prompts({
@@ -51,6 +55,7 @@ export default async function link() {
   const registryErr = validate(
     registry,
     text.orange(entryPath),
+    // FIXME: predicates.packs
     predicates.command
   );
   if (registryErr) {
@@ -72,7 +77,7 @@ export default async function link() {
     } else {
       const stats = fs.statSync(linkPath);
       if (stats.isDirectory() || stats.isFile()) {
-        fsExtra.remove(linkPath);
+        rimraf.sync(linkPath);
       }
     }
   }
@@ -83,13 +88,21 @@ export default async function link() {
     }
 
     let appJson = getApplication();
-    if (appJson[type].linked.indexOf(pkg.name) === -1) {
-      appJson[type].linked.push({
+    const index = appJson[type].findIndex(item => item.name === pkg.name);
+    if (index === -1) {
+      appJson[type].push({
         name: pkg.name,
         version: pkg.version,
+        type: 'link',
       });
-      setApplication(appJson);
+    } else {
+      appJson[type][index] = {
+        name: pkg.name,
+        version: pkg.version,
+        type: 'link',
+      };
     }
+    setApplication(appJson);
 
     console.log(
       label.green('LINKED'),

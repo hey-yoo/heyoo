@@ -10,14 +10,14 @@ const rimraf = require('rimraf');
 export default async function uninstall(plugins: string) {
   let appJson = getApplication();
 
-  const index = appJson.plugins.installed.findIndex(item => item.name === plugins);
+  const index = appJson.plugins.findIndex(item => item.name === plugins && item.type === 'install');
   if (index > -1) {
-    const waitUninstallPlugins = appJson.plugins.installed[index];
+    const waitUninstallPlugins = appJson.plugins[index];
     rimraf.sync(path.resolve(localPluginsPath, waitUninstallPlugins.name));
 
     const version = waitUninstallPlugins.version;
 
-    appJson.plugins.installed.splice(index, 1);
+    appJson.plugins.splice(index, 1);
     setApplication(appJson);
 
     console.log(
