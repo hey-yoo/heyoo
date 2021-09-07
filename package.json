@@ -60,6 +60,7 @@
     "ora": "^6.0.0",
     "ow": "^0.27.0",
     "prompts": "^2.4.1",
+    "rimraf": "^3.0.2",
     "std-terminal-logger": "^2.0.0"
   }
 }
