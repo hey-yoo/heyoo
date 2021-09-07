@@ -19,6 +19,7 @@ const externalDeps = [
   'ora',
   'axios',
   'decompress',
+  'rimraf',
 ];
 
 const externalNode = [

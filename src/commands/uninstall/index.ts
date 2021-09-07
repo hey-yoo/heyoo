@@ -1,8 +1,11 @@
-import { getApplication, setApplication } from '../../utils/application';
-import { fsExtra } from 'hey-yoo-utils';
 import path from 'path';
-import { localPluginsPath } from '../../utils/path';
+import { createRequire } from 'module'
 import { label, text } from 'std-terminal-logger';
+import { getApplication, setApplication } from '../../utils/application';
+import { localPluginsPath } from '../../utils/path';
+
+const require = createRequire(import.meta.url);
+const rimraf = require('rimraf');
 
 export default async function uninstall(plugins: string) {
   let appJson = getApplication();
@@ -10,8 +13,7 @@ export default async function uninstall(plugins: string) {
   const index = appJson.plugins.installed.findIndex(item => item.name === plugins);
   if (index > -1) {
     const waitUninstallPlugins = appJson.plugins.installed[index];
-    /* FIXME: pnpm安装的包会已link的形式存在，fsExtra.remove会报错 */
-    fsExtra.remove(path.resolve(localPluginsPath, waitUninstallPlugins.name));
+    rimraf.sync(path.resolve(localPluginsPath, waitUninstallPlugins.name));
 
     const version = waitUninstallPlugins.version;
 
