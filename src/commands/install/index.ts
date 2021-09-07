@@ -11,11 +11,12 @@ import axios from 'axios';
 import { getApplication, setApplication } from '../../utils/application';
 import { PACKAGE, PKG_MANAGER } from '../../constants';
 import { localPath, localPluginsPath } from '../../utils/path';
-import { installed } from '../../types';
+import { application, installed } from '../../types';
 
 const require = createRequire(import.meta.url);
 const download = require('download-git-repo');
 const decompress = require('decompress');
+const rimraf = require('rimraf');
 
 axios.defaults.timeout = 20 * 1000;
 
@@ -87,7 +88,7 @@ async function unzip(input, output) {
 
   loading.succeed();
 }
-async function installPkg(pkg: string, version: string, packageManager: string): Promise<installed | undefined> {
+async function installPkg(pkg: string, version: string, appJson: application): Promise<installed | undefined> {
   const pkgData = await fetchPkg(pkg);
   if (!pkgData) {
     return;
@@ -96,7 +97,21 @@ async function installPkg(pkg: string, version: string, packageManager: string):
     version = pkgData['dist-tags'].latest;
   }
 
-  // TODO: 检查本地是否已安装该插件,如果已安装则需继续检查版本是否一致
+  const outputPath = path.resolve(localPluginsPath, pkg);
+
+  const installed = appJson.plugins.installed.find(item => item.name === pkg);
+  if (installed) {
+    if (installed.version === version) {
+      console.log(
+        label.warn,
+        text.blue(pkg),
+        text.white(version),
+        'is already installed'
+      );
+      return;
+    }
+    rimraf.sync(outputPath);
+  }
 
   const url = pkgData.versions[version].dist.tarball;
   const pkgArrBuf = await downloadPkg(url);
@@ -107,11 +122,9 @@ async function installPkg(pkg: string, version: string, packageManager: string):
   await unzip(Buffer.from(pkgArrBuf), localPluginsPath)
 
   const packagePath = path.resolve(localPluginsPath, 'package');
-  const pluginsPath = path.resolve(localPluginsPath, pkg);
+  fs.renameSync(packagePath, outputPath);
 
-  fs.renameSync(packagePath, pluginsPath);
-
-  await installDeps(pluginsPath, packageManager);
+  await installDeps(outputPath, appJson.packageManager);
 
   return {
     name: pkg,
@@ -188,7 +201,7 @@ async function downloadGitRepo(repo: string, dest: string) {
   loading.succeed();
   return true;
 }
-async function installGitRepo(repo: string, version: string, packageManager: string): Promise<installed | undefined> {
+async function installGitRepo(repo: string, version: string, appJson: application): Promise<installed | undefined> {
   const pkgJson = await fetchGitRepo(repo);
   if (!pkgJson) {
     return;
@@ -197,9 +210,22 @@ async function installGitRepo(repo: string, version: string, packageManager: str
     version = pkgJson.version;
   }
 
-  // TODO: 检查本地是否已安装该插件
-
   const outputPath = path.resolve(localPluginsPath, pkgJson.name);
+
+  const installed = appJson.plugins.installed.find(item => item.name === repo);
+  if (installed) {
+    if (installed.version === version) {
+      console.log(
+        label.warn,
+        text.blue(repo),
+        text.white(version),
+        'is already installed'
+      );
+      return;
+    }
+    rimraf.sync(outputPath);
+  }
+
   fsExtra.ensureDir(outputPath);
 
   const isDownload = await downloadGitRepo(repo, outputPath);
@@ -207,7 +233,7 @@ async function installGitRepo(repo: string, version: string, packageManager: str
     return;
   }
 
-  await installDeps(outputPath, packageManager);
+  await installDeps(outputPath, appJson.packageManager);
 
   return {
     name: pkgJson.name,
@@ -243,9 +269,9 @@ export default async function install(plugins: string, options) {
 
   let newPlugins;
   if (options.git) {
-    newPlugins = await installGitRepo(name, '', appJson.packageManager);
+    newPlugins = await installGitRepo(name, '', appJson);
   } else {
-    newPlugins = await installPkg(name, version, appJson.packageManager);
+    newPlugins = await installPkg(name, version, appJson);
   }
 
   if (newPlugins) {
