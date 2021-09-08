@@ -6,15 +6,17 @@ import { ART_WORD_HEY_YOO } from './constants';
 import { fsExtra } from 'hey-yoo-utils';
 import { getAllPlugins } from './utils/getAllPlugins';
 import { pkgPath } from './utils/path';
+import chalk from 'chalk';
 
 async function hey() {
   const packageJson = fsExtra.readJson(pkgPath);
 
   const program = new Command();
   program
-    .name('hey')
+    .name(text.pink('hey'))
+    .usage(chalk.hex('#51cff7')('[command]'))
     .version(packageJson?.version || '')
-    .usage(text.green('[command]')).description(`${ART_WORD_HEY_YOO}
+    .description(`${ART_WORD_HEY_YOO}
 
 ${packageJson?.description}`);
 

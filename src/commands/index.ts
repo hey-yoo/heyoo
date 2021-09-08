@@ -36,7 +36,7 @@ const commands: command[] = [
     description: 'unlink the local plugins or packs',
   },
   {
-    command: 'run',
+    command: 'run <script>',
     action: run,
     option: [
       ['-d, --debug', 'run with [debug] mode'],

@@ -29,13 +29,7 @@ export interface application {
   };
 }
 
-export interface register {
-  script: string;
-  subprocess?: boolean;
-  watch?: string;
-}
-
 export interface heyConfig {
   packs: string;
-  register: register[],
+  register: string[],
 }
