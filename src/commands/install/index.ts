@@ -12,6 +12,7 @@ import { getApplication, setApplication } from '../../utils/application';
 import { PACKAGE, PKG_MANAGER } from '../../constants';
 import { localPath, localPluginsPath } from '../../utils/path';
 import { application, plugins } from '../../types';
+import ensurePkgPath from '../../utils/ensurePkgPath';
 
 const require = createRequire(import.meta.url);
 const download = require('download-git-repo');
@@ -97,6 +98,7 @@ async function installPkg(pkg: string, version: string, appJson: application): P
     version = pkgData['dist-tags'].latest;
   }
 
+  ensurePkgPath(localPluginsPath, pkg);
   const outputPath = path.resolve(localPluginsPath, pkg);
 
   const existPlugins = appJson.plugins.find(item => item.name === pkg);
@@ -211,6 +213,7 @@ async function installGitRepo(repo: string, version: string, appJson: applicatio
     version = pkgJson.version;
   }
 
+  ensurePkgPath(localPluginsPath, pkgJson.name);
   const outputPath = path.resolve(localPluginsPath, pkgJson.name);
 
   const existPlugins = appJson.plugins.find(item => item.name === repo);

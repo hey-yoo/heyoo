@@ -15,6 +15,7 @@ import { predicates, validate } from '../../utils/validate';
 import { label, text } from 'std-terminal-logger';
 import fileUrl from 'file-url';
 import { getApplication, setApplication } from '../../utils/application';
+import ensurePkgPath from '../../utils/ensurePkgPath';
 
 const require = createRequire(import.meta.url);
 const rimraf = require('rimraf');
@@ -35,40 +36,41 @@ export default async function link() {
     return console.log(label.error, `${currentPkgPath} isn't exist!`);
   }
 
-  const pkgErr = validate(
-    pkg,
-    text.orange(currentPkgPath),
-    predicates.packageJson
-  );
-  if (pkgErr) {
-    return console.log(label.error, pkgErr);
-  }
-
-  const entryPath = path.resolve(currentPath, pkg.exports);
-  if (!fs.existsSync(entryPath)) {
-    return console.log(label.error, `${entryPath} isn't exist!`);
-  }
-
-  const registryModule = await import(fileUrl(entryPath));
-  const registry = registryModule.default;
-
-  const registryErr = validate(
-    registry,
-    text.orange(entryPath),
-    // FIXME: predicates.packs
-    predicates.command
-  );
-  if (registryErr) {
-    return console.log(label.error, registryErr);
-  }
-
-  const linkPath = path.resolve(
-    type === PLUGINS ? localPluginsPath : localPacksPath,
-    pkg.name
-  );
-
+  const rootPath = type === PLUGINS ? localPluginsPath : localPacksPath;
   fsExtra.ensureDir(localPath);
-  fsExtra.ensureDir(localPluginsPath);
+  fsExtra.ensureDir(rootPath);
+
+  if (type === PLUGINS) {
+    const pkgErr = validate(
+      pkg,
+      text.orange(currentPkgPath),
+      predicates.packageJson
+    );
+    if (pkgErr) {
+      return console.log(label.error, pkgErr);
+    }
+
+    const entryPath = path.resolve(currentPath, pkg.exports);
+    if (!fs.existsSync(entryPath)) {
+      return console.log(label.error, `${entryPath} isn't exist!`);
+    }
+
+    const registryModule = await import(fileUrl(entryPath));
+    const registry = registryModule.default;
+
+    const registryErr = validate(
+      registry,
+      text.orange(entryPath),
+      predicates.command,
+    );
+    if (registryErr) {
+      return console.log(label.error, registryErr);
+    }
+  }
+
+  ensurePkgPath(rootPath, pkg.name);
+
+  const linkPath = path.resolve(rootPath, pkg.name);
 
   if (fs.existsSync(linkPath)) {
     const lStats = fs.lstatSync(linkPath);
