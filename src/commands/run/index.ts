@@ -20,11 +20,6 @@ export default async function run(script, options) {
     return;
   }
 
-  if (!config.register.find(item => item === script)) {
-    console.log(label.error, `${HEY_CONFIG_FILENAME}'s register attribute doesn't have ${text.orange(script)} script`);
-    return;
-  }
-
   const scriptPath = getScript(config.packs, script);
   if (!scriptPath) {
     console.log(label.error, `${text.blue(config.packs)}'s ${text.orange(script)} script isn't exist`);

@@ -2,7 +2,6 @@ import { application, heyConfig } from '../types';
 
 export const DEFAULT_HEY_CONFIG: heyConfig = {
   packs: '',
-  register: [],
 };
 
 export const DEFAULT_APPLICATION: application = {

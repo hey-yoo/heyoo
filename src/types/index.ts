@@ -31,5 +31,4 @@ export interface application {
 
 export interface heyConfig {
   packs: string;
-  register: string[],
 }
