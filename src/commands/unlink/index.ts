@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import { getApplication, setApplication } from '../../utils/application';
 import { fsExtra } from 'hey-yoo-utils';
-import { currentPkgPath, localPluginsPath } from '../../utils/path';
+import { currentPkgPath, localPacksPath, localPluginsPath } from '../../utils/path';
 import { predicates, validate } from '../../utils/validate';
 import { label, text } from 'std-terminal-logger';
 import { PACKS, PLUGINS } from '../../constants';
@@ -32,7 +32,7 @@ export default async function unlink() {
     }
   }
   if (type) {
-    const pluginsLinkPath = path.resolve(localPluginsPath, pkg.name);
+    const pluginsLinkPath = path.resolve(type === PLUGINS ? localPluginsPath : localPacksPath, pkg.name);
     if (fs.existsSync(pluginsLinkPath)) {
       const stats = fs.lstatSync(pluginsLinkPath);
       if (stats.isSymbolicLink()) {

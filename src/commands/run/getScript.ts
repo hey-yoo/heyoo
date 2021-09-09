@@ -1,9 +1,11 @@
 import path from 'path';
 import fs from 'fs';
+import { label, text } from 'std-terminal-logger';
 import { getApplication } from '../../utils/application';
 import { currentPath, localPacksPath } from '../../utils/path';
 import { fsExtra } from 'hey-yoo-utils';
 import { PACKAGE } from '../../constants';
+import { predicates, validate } from '../../utils/validate';
 
 export default function getScript(packs: string, script: string): string {
   const appJson = getApplication();
@@ -21,10 +23,16 @@ export default function getScript(packs: string, script: string): string {
   let tagPath = path.resolve(packsPath, `${script}.js`);
   if (!fs.existsSync(tagPath)) {
     const pkg = fsExtra.readJson(path.resolve(packsPath, PACKAGE));
-    if (!pkg || !pkg.exports) {
+    const pkgErr = validate(
+      pkg,
+      text.orange(`${packs}/${PACKAGE}`),
+      predicates.packageJson
+    );
+    if (pkgErr) {
+      console.log(label.error, pkgErr);
       return '';
     }
-    tagPath = path.resolve(packsPath, pkg.exports, `${script}.js`);
+    tagPath = path.resolve(packsPath, pkg?.exports[`./${script}`]);
     if (!fs.existsSync(tagPath)) {
       return '';
     }
