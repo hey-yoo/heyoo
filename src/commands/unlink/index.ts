@@ -13,15 +13,6 @@ export default async function unlink() {
     return;
   }
 
-  const pkgErr = validate(
-    pkg,
-    text.orange(currentPkgPath),
-    predicates.packageJson
-  );
-  if (pkgErr) {
-    return console.log(label.error, pkgErr);
-  }
-
   let appJson = getApplication();
 
   let type;
@@ -31,7 +22,17 @@ export default async function unlink() {
       break;
     }
   }
+
   if (type) {
+    const pkgErr = validate(
+      pkg,
+      text.orange(currentPkgPath),
+      type === PLUGINS ? predicates.pluginsPackage : predicates.packsPackage
+    );
+    if (pkgErr) {
+      return console.log(label.error, pkgErr);
+    }
+
     const pluginsLinkPath = path.resolve(type === PLUGINS ? localPluginsPath : localPacksPath, pkg.name);
     if (fs.existsSync(pluginsLinkPath)) {
       const stats = fs.lstatSync(pluginsLinkPath);

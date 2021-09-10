@@ -10,7 +10,7 @@ import { predicates, validate } from '../../utils/validate';
 export default function getScript(packs: string, script: string): string {
   const appJson = getApplication();
 
-  let packsPath = '';
+  let packsPath: string;
   if (appJson.packs.find(item => item.name === packs)) {
     packsPath = fs.readlinkSync(path.resolve(localPacksPath, packs));
   } else {
@@ -26,7 +26,7 @@ export default function getScript(packs: string, script: string): string {
     const pkgErr = validate(
       pkg,
       text.orange(`${packs}/${PACKAGE}`),
-      predicates.packageJson
+      predicates.packsPackage
     );
     if (pkgErr) {
       console.log(label.error, pkgErr);

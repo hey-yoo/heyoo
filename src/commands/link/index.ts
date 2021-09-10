@@ -44,7 +44,7 @@ export default async function link() {
     const pkgErr = validate(
       pkg,
       text.orange(currentPkgPath),
-      predicates.packageJson
+      predicates.pluginsPackage
     );
     if (pkgErr) {
       return console.log(label.error, pkgErr);
@@ -54,10 +54,8 @@ export default async function link() {
     if (!fs.existsSync(entryPath)) {
       return console.log(label.error, `${entryPath} isn't exist!`);
     }
-
     const registryModule = await import(fileUrl(entryPath));
     const registry = registryModule.default;
-
     const registryErr = validate(
       registry,
       text.orange(entryPath),

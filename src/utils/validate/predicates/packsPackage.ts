@@ -1,6 +1,6 @@
 import ow from '../ow';
 
-const packageJson = ow.object.partialShape({
+const packsPackage = ow.object.partialShape({
   name: ow.string.nonEmpty,
   version: ow.string.nonEmpty,
   type: ow.string.equals('module'),
@@ -17,4 +17,4 @@ const packageJson = ow.object.partialShape({
   }),
 });
 
-export default packageJson;
+export default packsPackage;

@@ -1,9 +1,11 @@
-import packageJson from './packageJson';
-import heyConfig from './heyConfig';
 import command from './command';
+import heyConfig from './heyConfig';
+import packsPackage from './packsPackage';
+import pluginsPackage from './pluginsPackage';
 
 export default {
-  packageJson,
-  heyConfig,
   command,
+  heyConfig,
+  packsPackage,
+  pluginsPackage
 };
