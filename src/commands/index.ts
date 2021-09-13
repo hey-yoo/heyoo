@@ -5,6 +5,7 @@ import run from './run';
 import install from './install';
 import uninstall from './uninstall';
 import list from './list';
+import create from './create';
 
 const commands: command[] = [
   {
@@ -43,6 +44,11 @@ const commands: command[] = [
       ['--preset [keys]', 'command preset key list'],
     ],
     description: 'run packs command',
+  },
+  {
+    command: 'create [type]',
+    action: create,
+    description: 'create plugins or packs from template',
   },
 ];
 

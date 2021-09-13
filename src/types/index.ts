@@ -19,13 +19,28 @@ export interface plugins extends packs {
   repo?: string;
 }
 
+export interface template {
+  title: string;
+  description?: string;
+}
+
+export interface gitTemplate extends template {
+  type: 'git';
+  repo: string;
+}
+
+export interface npmTemplate extends template {
+  type: 'npm';
+  pkg: string;
+}
+
 export interface application {
   packageManager: 'npm' | 'pnpm' | 'yarn' | '';
   plugins: plugins[];
   packs: packs[];
   template: {
-    plugins: string[];
-    packs: string[];
+    plugins: gitTemplate[];
+    packs: gitTemplate[];
   };
 }
 
