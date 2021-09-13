@@ -20,16 +20,19 @@ import ensurePkgPath from '../../utils/ensurePkgPath';
 const require = createRequire(import.meta.url);
 const rimraf = require('rimraf');
 
-export default async function link() {
-  const { type } = await prompts({
-    type: 'select',
-    name: 'type',
-    choices: [
-      { title: PLUGINS, value: PLUGINS },
-      { title: PACKS, value: PACKS },
-    ],
-    message: 'link as:',
-  });
+export default async function link(type: 'plugins' | 'packs') {
+  if (!type || ![PLUGINS, PACKS].includes(type)) {
+    const selected = await prompts({
+      type: 'select',
+      name: 'type',
+      choices: [
+        { title: PLUGINS, value: PLUGINS },
+        { title: PACKS, value: PACKS },
+      ],
+      message: 'link as:',
+    });
+    type = selected.type;
+  }
 
   const pkg = fsExtra.readJson(currentPkgPath);
   if (!pkg) {

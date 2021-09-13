@@ -27,7 +27,7 @@ const commands: command[] = [
     description: 'get the list of local plugins and packs',
   },
   {
-    command: 'link',
+    command: 'link [type]',
     action: link,
     description: 'makes the current local plugins or packs accessible',
   },
