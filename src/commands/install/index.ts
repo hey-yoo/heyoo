@@ -3,7 +3,6 @@ import path from 'path';
 import { exec } from 'child_process';
 import { Buffer } from 'buffer';
 import fs from 'fs';
-import prompts from 'prompts';
 import { fsExtra } from 'hey-yoo-utils';
 import { label, text } from 'std-terminal-logger';
 import ora from 'ora';
@@ -15,6 +14,7 @@ import { application, plugins } from '../../types';
 import ensurePkgPath from '../../utils/ensurePkgPath';
 
 const require = createRequire(import.meta.url);
+const prompts = require('prompts');
 const download = require('download-git-repo');
 const decompress = require('decompress');
 const rimraf = require('rimraf');

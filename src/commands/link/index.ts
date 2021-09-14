@@ -1,6 +1,5 @@
 import path from 'path';
 import fs from 'fs';
-import prompts from 'prompts';
 import { createRequire } from 'module';
 import { PACKS, PLUGINS } from '../../constants';
 import {
@@ -18,6 +17,7 @@ import { getApplication, setApplication } from '../../utils/application';
 import ensurePkgPath from '../../utils/ensurePkgPath';
 
 const require = createRequire(import.meta.url);
+const prompts = require('prompts');
 const rimraf = require('rimraf');
 
 export default async function link(type: 'plugins' | 'packs') {

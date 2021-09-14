@@ -1,3 +1,4 @@
+import process from 'process';
 import { Command } from 'commander';
 import { text } from 'std-terminal-logger';
 import commands from './commands';
