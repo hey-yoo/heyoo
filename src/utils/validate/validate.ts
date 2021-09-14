@@ -1,6 +1,5 @@
-import owDefault, { BasePredicate } from 'ow';
-// @ts-ignore
-const ow = owDefault.default;
+import ow from './ow';
+import { BasePredicate } from 'ow';
 
 export default function validate(
   value: unknown,
