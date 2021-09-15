@@ -89,7 +89,7 @@ hey list
 
 #### run
 
-如果在当前路径下存在配置文件 [hey.config](#hey.config) ，并且有指定目标`packs`，则会找到该 packs ，并执行可以运行的函数。
+如果在当前路径下存在配置文件 [hey.config](#heyconfig) ，并且有指定目标`packs`，则会找到该 packs ，并执行可以运行的函数。
 
 ```shell
 hey run [script]
@@ -127,7 +127,7 @@ export default [] as command[];
 
 ### 包
 
-包是用于为具体项目(存在配置文件 [hey.config](#hey.config) 的项目)提供拓展功能的。
+包是用于为具体项目(存在配置文件 [hey.config](#heyconfig) 的项目)提供拓展功能的。
 
 其目录下的 package.json 必须有 exports 属性，并且它的值必须这样一个对象:
 
