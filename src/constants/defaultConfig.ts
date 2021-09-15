@@ -1,13 +1,16 @@
-import { application, heyConfig } from '../types';
+import { application, heyConfig, setting } from '../types';
 
 export const DEFAULT_HEY_CONFIG: heyConfig = {
   packs: '',
 };
 
 export const DEFAULT_APPLICATION: application = {
-  packageManager: '',
   plugins: [],
   packs: [],
+};
+
+export const DEFAULT_SETTING: setting = {
+  packageManager: '',
   template: {
     plugins: [
       {

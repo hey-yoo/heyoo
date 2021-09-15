@@ -35,9 +35,14 @@ export interface npmTemplate extends template {
 }
 
 export interface application {
-  packageManager: 'npm' | 'pnpm' | 'yarn' | '';
   plugins: plugins[];
   packs: packs[];
+}
+
+export type packageManager = 'npm' | 'pnpm' | 'yarn' | ''
+
+export interface setting {
+  packageManager: packageManager;
   template: {
     plugins: gitTemplate[];
     packs: gitTemplate[];

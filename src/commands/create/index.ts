@@ -4,10 +4,10 @@ import fs from 'fs';
 import ora from 'ora';
 import { label, text } from 'std-terminal-logger';
 import { fsExtra } from 'hey-yoo-utils';
-import { getApplication } from '../../utils/application';
-import { DEFAULT_APPLICATION, PACKAGE, PACKS, PLUGINS } from '../../constants';
+import { DEFAULT_SETTING, PACKAGE, PACKS, PLUGINS } from '../../constants';
 import { predicates, validate } from '../../utils/validate';
 import { currentPath } from '../../utils/path';
+import { getSetting } from '../../utils/setting';
 
 const require = createRequire(import.meta.url);
 const prompts = require('prompts');
@@ -80,9 +80,9 @@ export default async function create(type) {
     type = selected.type;
   }
 
-  const appJson = getApplication();
+  const appJson = getSetting();
 
-  const templateChoices = (appJson.template[type] || DEFAULT_APPLICATION.template[type]).map((item) => {
+  const templateChoices = (appJson.template[type] || DEFAULT_SETTING.template[type]).map((item) => {
     if (!validate(item, '', predicates.template)) {
       return {
         title: item.title,

@@ -7,6 +7,7 @@ export const LOCAL_PATH = '.local';
 export const PACKS = 'packs';
 export const PLUGINS = 'plugins';
 
+export const SETTING = 'setting.json';
 export const APPLICATION = 'application.json';
 export const PACKAGE = 'package.json';
 

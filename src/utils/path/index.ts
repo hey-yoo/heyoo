@@ -7,6 +7,7 @@ import {
   PACKAGE,
   PACKS,
   PLUGINS,
+  SETTING,
 } from '../../constants';
 
 export const { __dirname, __filename } = pathExtra.getGlobalPath(
@@ -14,6 +15,7 @@ export const { __dirname, __filename } = pathExtra.getGlobalPath(
 );
 export const basePath = path.resolve(__dirname, '../');
 export const pkgPath = path.resolve(basePath, PACKAGE);
+export const settingPath = path.resolve(basePath, SETTING);
 export const applicationPath = path.resolve(basePath, APPLICATION);
 export const localPath = path.resolve(basePath, LOCAL_PATH);
 export const localPluginsPath = path.resolve(localPath, PLUGINS);

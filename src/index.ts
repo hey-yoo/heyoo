@@ -1,15 +1,21 @@
 import process from 'process';
+import fs from 'fs';
 import { Command } from 'commander';
 import { text } from 'std-terminal-logger';
 import commands from './commands';
 import registry from './utils/registry';
-import { ART_WORD_HEY_YOO } from './constants';
+import { ART_WORD_HEY_YOO, DEFAULT_SETTING } from './constants';
 import { fsExtra } from 'hey-yoo-utils';
 import { getAllPlugins } from './utils/getAllPlugins';
-import { pkgPath } from './utils/path';
+import { pkgPath, settingPath } from './utils/path';
 import chalk from 'chalk';
+import { setSetting } from './utils/setting';
 
 async function hey() {
+  if (!fs.existsSync(settingPath)) {
+    setSetting(DEFAULT_SETTING);
+  }
+
   const packageJson = fsExtra.readJson(pkgPath);
 
   const program = new Command();

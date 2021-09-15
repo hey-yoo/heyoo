@@ -19,6 +19,7 @@ yarn-error.log*
 /bin
 /.local
 application.json
+setting.json
 
 # env
 .env.local

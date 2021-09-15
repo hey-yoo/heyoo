@@ -10,8 +10,9 @@ import axios from 'axios';
 import { getApplication, setApplication } from '../../utils/application';
 import { PACKAGE, PKG_MANAGER } from '../../constants';
 import { localPath, localPluginsPath } from '../../utils/path';
-import { application, plugins } from '../../types';
+import { packageManager, plugins } from '../../types';
 import ensurePkgPath from '../../utils/ensurePkgPath';
+import { getSetting, setSetting } from '../../utils/setting';
 
 const require = createRequire(import.meta.url);
 const prompts = require('prompts');
@@ -89,7 +90,7 @@ async function unzip(input, output) {
 
   loading.succeed();
 }
-async function installPkg(pkg: string, version: string, appJson: application): Promise<plugins | undefined> {
+async function installPkg(pkg: string, version: string, plugins: plugins[], packageManager: packageManager): Promise<plugins | undefined> {
   const pkgData = await fetchPkg(pkg);
   if (!pkgData) {
     return;
@@ -101,7 +102,7 @@ async function installPkg(pkg: string, version: string, appJson: application): P
   ensurePkgPath(localPluginsPath, pkg);
   const outputPath = path.resolve(localPluginsPath, pkg);
 
-  const existPlugins = appJson.plugins.find(item => item.name === pkg);
+  const existPlugins = plugins.find(item => item.name === pkg);
   if (existPlugins) {
     if (existPlugins.version === version) {
       console.log(
@@ -126,7 +127,7 @@ async function installPkg(pkg: string, version: string, appJson: application): P
   const packagePath = path.resolve(localPluginsPath, 'package');
   fs.renameSync(packagePath, outputPath);
 
-  await installDeps(outputPath, appJson.packageManager);
+  await installDeps(outputPath, packageManager);
 
   return {
     name: pkg,
@@ -204,7 +205,7 @@ async function downloadGitRepo(repo: string, dest: string) {
   loading.succeed();
   return true;
 }
-async function installGitRepo(repo: string, version: string, appJson: application): Promise<plugins | undefined> {
+async function installGitRepo(repo: string, version: string, plugins: plugins[], packageManager: packageManager): Promise<plugins | undefined> {
   const pkgJson = await fetchGitRepo(repo);
   if (!pkgJson) {
     return;
@@ -216,7 +217,7 @@ async function installGitRepo(repo: string, version: string, appJson: applicatio
   ensurePkgPath(localPluginsPath, pkgJson.name);
   const outputPath = path.resolve(localPluginsPath, pkgJson.name);
 
-  const existPlugins = appJson.plugins.find(item => item.name === repo);
+  const existPlugins = plugins.find(item => item.name === repo);
   if (existPlugins) {
     if (existPlugins.version === version) {
       console.log(
@@ -237,7 +238,7 @@ async function installGitRepo(repo: string, version: string, appJson: applicatio
     return;
   }
 
-  await installDeps(outputPath, appJson.packageManager);
+  await installDeps(outputPath, packageManager);
 
   return {
     name: pkgJson.name,
@@ -248,8 +249,8 @@ async function installGitRepo(repo: string, version: string, appJson: applicatio
 }
 
 export default async function install(plugins: string, options) {
-  let appJson = getApplication();
-  if (!appJson.packageManager || PKG_MANAGER.indexOf(appJson.packageManager) === -1) {
+  let setting = getSetting();
+  if (!setting.packageManager || PKG_MANAGER.indexOf(setting.packageManager) === -1) {
     const { packageManager } = await prompts({
       type: 'select',
       name: 'packageManager',
@@ -259,8 +260,8 @@ export default async function install(plugins: string, options) {
       })),
       message: 'what package manager you want to use:'
     });
-    appJson.packageManager = packageManager;
-    setApplication(appJson);
+    setting.packageManager = packageManager;
+    setSetting(setting);
   }
 
   fsExtra.ensureDir(localPath);
@@ -272,11 +273,12 @@ export default async function install(plugins: string, options) {
     [name, version] = plugins.split('@');
   }
 
+  let appJson = getApplication();
   let newPlugins;
   if (options.git) {
-    newPlugins = await installGitRepo(name, '', appJson);
+    newPlugins = await installGitRepo(name, '', appJson.plugins, setting.packageManager);
   } else {
-    newPlugins = await installPkg(name, version, appJson);
+    newPlugins = await installPkg(name, version, appJson.plugins, setting.packageManager);
   }
 
   if (newPlugins) {
