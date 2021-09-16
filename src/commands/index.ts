@@ -7,35 +7,41 @@ import uninstall from './uninstall';
 import list from './list';
 import create from './create';
 import setting from './setting';
+import description from '../constants/description';
 
 const commands: command[] = [
+  {
+    command: 'create [type]',
+    action: create,
+    description: description.create,
+  },
+  {
+    command: 'link [type]',
+    action: link,
+    description: description.link,
+  },
+  {
+    command: 'unlink',
+    action: unlink,
+    description: description.unlink,
+  },
   {
     command: 'install <plugins>',
     action: install,
     option: [
       ['--git', 'download a git repository as a plugins'],
     ],
-    description: 'install the npm package as a plugins'
+    description: description.install,
   },
   {
     command: 'uninstall <plugins>',
     action: uninstall,
-    description: 'uninstall the local plugins'
+    description: description.uninstall,
   },
   {
     command: 'list',
     action: list,
-    description: 'get the list of local plugins and packs',
-  },
-  {
-    command: 'link [type]',
-    action: link,
-    description: 'makes the current local plugins or packs accessible',
-  },
-  {
-    command: 'unlink',
-    action: unlink,
-    description: 'unlink the local plugins or packs',
+    description: description.list,
   },
   {
     command: 'run <script>',
@@ -44,17 +50,12 @@ const commands: command[] = [
       ['-d, --debug', 'run with [debug] mode'],
       ['--preset [keys]', 'command preset key list'],
     ],
-    description: 'run packs command',
-  },
-  {
-    command: 'create [type]',
-    action: create,
-    description: 'create plugins or packs from template',
+    description: description.run,
   },
   {
     command: 'setting',
     action: setting,
-    description: 'open the setting file',
+    description: description.setting,
   },
 ];
 
