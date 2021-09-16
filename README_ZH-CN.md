@@ -95,6 +95,14 @@ hey list
 hey run [script]
 ```
 
+#### setting
+
+打开设置文件 [setting.json](#settingjson)。
+
+```shell
+hey setting
+```
+
 ### 插件
 
 插件是通过在`heyoo`上注册新的命令达到拓展`heyoo`功能的。
@@ -145,7 +153,6 @@ export default [] as command[];
 
 exports 属性指定的文件必须导出默认的函数(export default function () {})。
 
-
 ### 配置文件
 
 #### hey.config
@@ -161,7 +168,7 @@ export default {
 };
 ```
 
-#### setting
+#### setting.json
 
 在首次使用时会在`heyoo`下生成设置文件 setting.json：
 
