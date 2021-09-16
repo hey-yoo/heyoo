@@ -18,7 +18,7 @@ export default async function unlink() {
   let type;
   const types = [PLUGINS, PACKS, ''];
   for (type of types) {
-    if (appJson[type].find(item => item.name === pkg.name && item.type === 'link')) {
+    if ((appJson[type] || []).find(item => item.name === pkg.name && item.type === 'link')) {
       break;
     }
   }
