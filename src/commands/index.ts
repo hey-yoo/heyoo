@@ -6,6 +6,7 @@ import install from './install';
 import uninstall from './uninstall';
 import list from './list';
 import create from './create';
+import setting from './setting';
 
 const commands: command[] = [
   {
@@ -49,6 +50,11 @@ const commands: command[] = [
     command: 'create [type]',
     action: create,
     description: 'create plugins or packs from template',
+  },
+  {
+    command: 'setting',
+    action: setting,
+    description: 'open the setting file',
   },
 ];
 
