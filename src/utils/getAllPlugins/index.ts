@@ -58,7 +58,17 @@ export async function getAllPlugins(): Promise<command[]> {
   );
 
   const allValidPlugins = all
-    .map((item) => item.default)
+    .map(item => item.default)
+    .map((items, index) => {
+      if (Array.isArray(items)) {
+        items.forEach((item) => {
+          if (item.description) {
+            item.description = `[${pluginsPaths[index].name}]${item.description}`;
+          }
+        });
+      }
+      return items;
+    })
     .filter((item, index) => {
       const validateErr = validate(
         item,
