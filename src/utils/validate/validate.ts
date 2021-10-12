@@ -14,6 +14,7 @@ export default function validate(
       ow(value, predicate);
     }
   } catch (error) {
+    // @ts-ignore
     result = error;
   }
   return result;

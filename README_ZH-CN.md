@@ -48,10 +48,13 @@ hey link [type]
 
 #### unlink
 
-解除当前路径下的`plugins`或`packs`的链接。
+解除当前路径下的`plugins`或`packs`的链接，也可以解除指定名称的目标链接。
 
 ```shell
+# 解除当前路径下的链接
 hey unlink
+# 解除指定名称的链接
+hey unlink [name]
 ```
 
 #### install

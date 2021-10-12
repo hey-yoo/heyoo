@@ -269,7 +269,7 @@ export default async function install(plugins: string, options) {
 
   let name = plugins;
   let version;
-  if (plugins.includes('@')) {
+  if (plugins.indexOf('@') > 0) {
     [name, version] = plugins.split('@');
   }
 

@@ -43,16 +43,16 @@ export default async function link(type: 'plugins' | 'packs') {
   fsExtra.ensureDir(localPath);
   fsExtra.ensureDir(rootPath);
 
-  if (type === PLUGINS) {
-    const pkgErr = validate(
-      pkg,
-      text.orange(currentPkgPath),
-      predicates.pluginsPackage
-    );
-    if (pkgErr) {
-      return console.log(label.error, pkgErr);
-    }
+  const pkgErr = validate(
+    pkg,
+    text.orange(currentPkgPath),
+    type === PLUGINS ? predicates.pluginsPackage : predicates.packsPackage
+  );
+  if (pkgErr) {
+    return console.log(label.error, pkgErr);
+  }
 
+  if (type === PLUGINS) {
     const entryPath = path.resolve(currentPath, pkg.exports);
     if (!fs.existsSync(entryPath)) {
       return console.log(label.error, `${entryPath} isn't exist!`);
