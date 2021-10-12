@@ -50,10 +50,13 @@ For `packs`, the priority of the linked package is higher than the package in no
 
 #### unlink
 
-Unlink the `plugins` or `packs` under the current path.
+Unlink the `plugins` or `packs` under the current path, and also can remove the target link of the specified name.
 
 ```shell
+# unlink target by current path
 hey unlink
+# unlink target by its name
+hey unlink [name]
 ```
 
 #### install
