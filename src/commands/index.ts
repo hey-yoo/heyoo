@@ -21,7 +21,7 @@ const commands: command[] = [
     description: description.link,
   },
   {
-    command: 'unlink',
+    command: 'unlink [name]',
     action: unlink,
     description: description.unlink,
   },
