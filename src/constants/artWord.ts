@@ -1,4 +1,4 @@
-import { text } from 'std-terminal-logger';
+import { text } from 'chalk-ex';
 import chalk from 'chalk';
 
 export const ART_WORD_HEY_YOO = `

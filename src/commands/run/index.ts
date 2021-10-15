@@ -1,5 +1,5 @@
 import process from 'process';
-import { label, text } from 'std-terminal-logger';
+import { label, text } from 'chalk-ex';
 import { getConfig } from '../../utils/getConfig';
 import { currentPath } from '../../utils/path';
 import { heyConfig } from '../../types';
@@ -8,7 +8,7 @@ import getScript from './getScript';
 import { HEY_CONFIG_FILENAME } from '../../constants';
 import exec from './exec';
 
-export default async function run(script, options) {
+export default async function run(script) {
   const config = await getConfig<heyConfig>(currentPath);
   if (!config) {
     console.log(label.error, `Can't find ${HEY_CONFIG_FILENAME} in ${currentPath}`);

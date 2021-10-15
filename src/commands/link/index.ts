@@ -1,6 +1,5 @@
 import path from 'path';
 import fs from 'fs';
-import { createRequire } from 'module';
 import { PACKS, PLUGINS } from '../../constants';
 import {
   currentPath,
@@ -11,14 +10,14 @@ import {
 } from '../../utils/path';
 import { fsExtra } from 'hey-yoo-utils';
 import { predicates, validate } from '../../utils/validate';
-import { label, text } from 'std-terminal-logger';
+import { label, text } from 'chalk-ex';
 import fileUrl from 'file-url';
 import { getApplication, setApplication } from '../../utils/application';
 import ensurePkgPath from '../../utils/ensurePkgPath';
-
-const require = createRequire(import.meta.url);
-const prompts = require('prompts');
-const rimraf = require('rimraf');
+import {
+  prompts,
+  rimraf,
+} from '../../deps';
 
 export default async function link(type: 'plugins' | 'packs') {
   if (!type || ![PLUGINS, PACKS].includes(type)) {

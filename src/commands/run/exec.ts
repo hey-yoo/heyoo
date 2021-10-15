@@ -1,4 +1,4 @@
-import { label } from 'std-terminal-logger';
+import { label } from 'chalk-ex';
 import fileUrl from 'file-url';
 
 export default async function exec(scriptPath: string) {

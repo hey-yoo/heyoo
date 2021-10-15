@@ -10,11 +10,11 @@ const resolve = function (...args) {
 
 const externalDeps = [
   'commander',
-  'std-terminal-logger',
   'ow',
   'hey-yoo-utils',
   'file-url',
   'chalk',
+  'chalk-ex',
   'prompts',
   'ora',
   'axios',

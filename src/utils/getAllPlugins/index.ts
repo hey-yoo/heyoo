@@ -7,7 +7,7 @@ import { command } from '../../types';
 import { validate, predicates } from '../validate';
 import { getApplication } from '../application';
 import { localPluginsPath } from '../path';
-import { label, log, text } from 'std-terminal-logger';
+import { label, text } from 'chalk-ex';
 
 interface localItem {
   name: string;
@@ -76,7 +76,7 @@ export async function getAllPlugins(): Promise<command[]> {
         predicates.command
       );
       if (validateErr) {
-        log(label.error, validateErr);
+        console.log(label.error, validateErr);
         return false;
       }
       return !item.some((reg) => RESERVED_WORD.indexOf(reg.command) > -1);
