@@ -166,7 +166,9 @@ export default async function create(type) {
     keywords: (keywords || '').replace(/ /g, '').split(','),
     author,
     license,
-    bugs: repoName ? `https://github.com/${repoName}/issues` : '',
+    bugs: repoName ? {
+      url: `https://github.com/${repoName}/issues`,
+    } : '',
     homepage: repoName ? `https://github.com/${repoName}#readme` : '',
   };
 
