@@ -1,6 +1,6 @@
 import path from 'path';
 import { createRequire } from 'module'
-import { label, text } from 'std-terminal-logger';
+import { label, text } from 'chalk-ex';
 import { getApplication, setApplication } from '../../utils/application';
 import { localPluginsPath } from '../../utils/path';
 

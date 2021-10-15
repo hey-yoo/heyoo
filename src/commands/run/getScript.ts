@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import { label, text } from 'std-terminal-logger';
+import { label, text } from 'chalk-ex';
 import { getApplication } from '../../utils/application';
 import { currentPath, localPacksPath } from '../../utils/path';
 import { fsExtra } from 'hey-yoo-utils';

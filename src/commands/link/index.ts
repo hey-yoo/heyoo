@@ -11,7 +11,7 @@ import {
 } from '../../utils/path';
 import { fsExtra } from 'hey-yoo-utils';
 import { predicates, validate } from '../../utils/validate';
-import { label, text } from 'std-terminal-logger';
+import { label, text } from 'chalk-ex';
 import fileUrl from 'file-url';
 import { getApplication, setApplication } from '../../utils/application';
 import ensurePkgPath from '../../utils/ensurePkgPath';

@@ -4,7 +4,7 @@ import { getApplication, setApplication } from '../../utils/application';
 import { fsExtra } from 'hey-yoo-utils';
 import { currentPkgPath, localPacksPath, localPluginsPath } from '../../utils/path';
 import { predicates, validate } from '../../utils/validate';
-import { label, text } from 'std-terminal-logger';
+import { label, text } from 'chalk-ex';
 import { PACKAGE, PACKS, PLUGINS } from '../../constants';
 
 export default async function unlink(name) {

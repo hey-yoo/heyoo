@@ -4,7 +4,7 @@ import { exec } from 'child_process';
 import { Buffer } from 'buffer';
 import fs from 'fs';
 import { fsExtra } from 'hey-yoo-utils';
-import { label, text } from 'std-terminal-logger';
+import { label, text } from 'chalk-ex';
 import ora from 'ora';
 import axios from 'axios';
 import { getApplication, setApplication } from '../../utils/application';

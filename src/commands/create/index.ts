@@ -2,7 +2,7 @@ import { createRequire } from 'module';
 import path from 'path';
 import fs from 'fs';
 import ora from 'ora';
-import { label, text } from 'std-terminal-logger';
+import { label, text } from 'chalk-ex';
 import { fsExtra } from 'hey-yoo-utils';
 import { DEFAULT_SETTING, PACKAGE, PACKS, PLUGINS } from '../../constants';
 import { predicates, validate } from '../../utils/validate';

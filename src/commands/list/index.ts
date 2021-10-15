@@ -1,4 +1,4 @@
-import { text } from 'std-terminal-logger';
+import { text } from 'chalk-ex';
 import { getApplication } from '../../utils/application';
 import { PACKS, PLUGINS } from '../../constants';
 

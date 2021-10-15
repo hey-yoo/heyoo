@@ -1,4 +1,4 @@
-import { text } from 'std-terminal-logger';
+import { text } from 'chalk-ex';
 
 export default {
   create: text.red('create plugins or packs from template'),

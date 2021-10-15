@@ -1,7 +1,7 @@
 import process from 'process';
 import fs from 'fs';
 import { Command } from 'commander';
-import { text } from 'std-terminal-logger';
+import { text } from 'chalk-ex';
 import commands from './commands';
 import registry from './utils/registry';
 import { ART_WORD_HEY_YOO, DEFAULT_SETTING } from './constants';
