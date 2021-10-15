@@ -1,4 +1,3 @@
-import { createRequire } from 'module';
 import path from 'path';
 import fs from 'fs';
 import ora from 'ora';
@@ -8,11 +7,11 @@ import { DEFAULT_SETTING, PACKAGE, PACKS, PLUGINS } from '../../constants';
 import { predicates, validate } from '../../utils/validate';
 import { currentPath } from '../../utils/path';
 import { getSetting } from '../../utils/setting';
-
-const require = createRequire(import.meta.url);
-const prompts = require('prompts');
-const download = require('download-git-repo');
-const rimraf = require('rimraf');
+import {
+  prompts,
+  downloadGitRepo as download,
+  rimraf,
+} from '../../deps';
 
 const COVER = 'COVER';
 const IS_EMPTY = 'IS_EMPTY';

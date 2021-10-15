@@ -1,4 +1,3 @@
-import { createRequire } from 'module';
 import path from 'path';
 import { exec } from 'child_process';
 import { Buffer } from 'buffer';
@@ -13,12 +12,12 @@ import { localPath, localPluginsPath } from '../../utils/path';
 import { packageManager, plugins } from '../../types';
 import ensurePkgPath from '../../utils/ensurePkgPath';
 import { getSetting, setSetting } from '../../utils/setting';
-
-const require = createRequire(import.meta.url);
-const prompts = require('prompts');
-const download = require('download-git-repo');
-const decompress = require('decompress');
-const rimraf = require('rimraf');
+import {
+  prompts,
+  downloadGitRepo as download,
+  decompress,
+  rimraf,
+} from '../../deps';
 
 axios.defaults.timeout = 20 * 1000;
 

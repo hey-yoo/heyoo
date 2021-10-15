@@ -1,8 +1,5 @@
-import { createRequire } from 'module';
 import { settingPath } from '../../utils/path';
-
-const require = createRequire(import.meta.url);
-const open = require('open');
+import { open } from '../../deps';
 
 export default function setting() {
   open(settingPath);
