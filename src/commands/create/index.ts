@@ -1,8 +1,8 @@
 import path from 'path';
 import fs from 'fs';
+import fsEx from 'fs-extra';
 import ora from 'ora';
 import { label, text } from 'chalk-ex';
-import { fsExtra } from 'hey-yoo-utils';
 import { DEFAULT_SETTING, PACKAGE, PACKS, PLUGINS } from '../../constants';
 import { predicates, validate } from '../../utils/validate';
 import { currentPath } from '../../utils/path';
@@ -139,7 +139,7 @@ export default async function create(type) {
 
   const tagPath = path.resolve(currentPath, name);
   rimraf.sync(tagPath);
-  fsExtra.ensureDir(tagPath);
+  await fsEx.ensureDir(tagPath);
 
   const isDownloadSuccess = await downloadTemplate(template, tagPath);
   if (!isDownloadSuccess) {
@@ -172,7 +172,7 @@ export default async function create(type) {
   };
 
   const pkgPath = path.resolve(tagPath, PACKAGE);
-  let pkg = fsExtra.readJson(pkgPath);
+  let pkg = await fsEx.readJson(pkgPath);
   if (pkg) {
     const mission = [
       { key: 'name', type: COVER },

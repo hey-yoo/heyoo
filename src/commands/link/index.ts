@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs';
+import fsEx from 'fs-extra';
 import { PACKS, PLUGINS } from '../../constants';
 import {
   currentPath,
@@ -8,7 +9,6 @@ import {
   localPacksPath,
   localPath,
 } from '../../utils/path';
-import { fsExtra } from 'hey-yoo-utils';
 import { predicates, validate } from '../../utils/validate';
 import { label, text } from 'chalk-ex';
 import fileUrl from 'file-url';
@@ -33,14 +33,14 @@ export default async function link(type: 'plugins' | 'packs') {
     type = selected.type;
   }
 
-  const pkg = fsExtra.readJson(currentPkgPath);
+  const pkg = await fsEx.readJson(currentPkgPath);
   if (!pkg) {
     return console.log(label.error, `${currentPkgPath} isn't exist!`);
   }
 
   const rootPath = type === PLUGINS ? localPluginsPath : localPacksPath;
-  fsExtra.ensureDir(localPath);
-  fsExtra.ensureDir(rootPath);
+  await fsEx.ensureDir(localPath);
+  await fsEx.ensureDir(rootPath);
 
   const pkgErr = validate(
     pkg,

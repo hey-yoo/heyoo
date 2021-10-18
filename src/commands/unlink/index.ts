@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
+import fsEx from 'fs-extra';
 import { getApplication, setApplication } from '../../utils/application';
-import { fsExtra } from 'hey-yoo-utils';
 import { currentPkgPath, localPacksPath, localPluginsPath } from '../../utils/path';
 import { predicates, validate } from '../../utils/validate';
 import { label, text } from 'chalk-ex';
@@ -37,7 +37,7 @@ export default async function unlink(name) {
     }
   }
 
-  const pkg = fsExtra.readJson(tagPkgPath);
+  const pkg = await fsEx.readJson(tagPkgPath);
   if (!pkg) {
     return;
   }

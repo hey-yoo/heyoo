@@ -1,12 +1,12 @@
 import path from 'path';
-import { fsExtra } from 'hey-yoo-utils';
+import fsEx from 'fs-extra';
 
 export default function ensurePkgPath(basePath: string, pkgName: string) {
   if (pkgName.includes('/')) {
     const pkgNameArr = pkgName.split('/');
     for (let i = 0; i < pkgNameArr.length - 1; i++) {
       basePath = path.resolve(basePath, pkgNameArr[i]);
-      fsExtra.ensureDir(basePath);
+      fsEx.ensureDirSync(basePath);
     }
   }
 }

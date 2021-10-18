@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import { fsExtra } from 'hey-yoo-utils';
+import fsEx from 'fs-extra';
 import fileUrl from 'file-url';
 import { PACKAGE, RESERVED_WORD } from '../../constants';
 import { command } from '../../types';
@@ -40,7 +40,7 @@ export async function getAllPlugins(): Promise<command[]> {
     .filter(Boolean) as localItem[];
 
   const pluginsPaths = localPlugins.map((item) => {
-    const pkg = fsExtra.readJson(path.resolve(item.path, PACKAGE));
+    const pkg = fsEx.readJsonSync(path.resolve(item.path, PACKAGE));
     if (pkg && pkg.exports) {
       const actualPkgPath = path.resolve(item.path, pkg.exports);
       if (fs.existsSync(actualPkgPath)) {

@@ -2,7 +2,7 @@ import path from 'path';
 import { exec } from 'child_process';
 import { Buffer } from 'buffer';
 import fs from 'fs';
-import { fsExtra } from 'hey-yoo-utils';
+import fsEx from 'fs-extra';
 import { label, text } from 'chalk-ex';
 import ora from 'ora';
 import axios from 'axios';
@@ -22,7 +22,7 @@ import {
 axios.defaults.timeout = 20 * 1000;
 
 async function installDeps(rootPath: string, packageManager: string) {
-  const pkg = fsExtra.readJson(path.resolve(rootPath, PACKAGE));
+  const pkg = await fsEx.readJson(path.resolve(rootPath, PACKAGE));
   if (pkg && pkg.dependencies && Object.keys(pkg.dependencies).length > 0) {
     const loading = ora(`install dependencies`).start();
 
@@ -230,7 +230,7 @@ async function installGitRepo(repo: string, version: string, plugins: plugins[],
     rimraf.sync(outputPath);
   }
 
-  fsExtra.ensureDir(outputPath);
+  await fsEx.ensureDir(outputPath);
 
   const isDownload = await downloadGitRepo(repo, outputPath);
   if (!isDownload) {
@@ -263,8 +263,8 @@ export default async function install(plugins: string, options) {
     setSetting(setting);
   }
 
-  fsExtra.ensureDir(localPath);
-  fsExtra.ensureDir(localPluginsPath);
+  await fsEx.ensureDir(localPath);
+  await fsEx.ensureDir(localPluginsPath);
 
   let name = plugins;
   let version;

@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { fsExtra } from 'hey-yoo-utils';
+import fsEx from 'fs-extra';
 import { application } from '../../types';
 import { applicationPath } from '../path';
 import { DEFAULT_APPLICATION } from '../../constants';
@@ -8,7 +8,7 @@ export function getApplication(): application {
   if (!fs.existsSync(applicationPath)) {
     return DEFAULT_APPLICATION;
   }
-  return fsExtra.readJson(applicationPath) as application;
+  return fsEx.readJsonSync(applicationPath) as application;
 }
 
 export function setApplication(appJson: application) {

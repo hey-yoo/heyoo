@@ -1,11 +1,11 @@
 import process from 'process';
 import fs from 'fs';
+import fsEx from 'fs-extra';
 import { Command } from 'commander';
 import { text } from 'chalk-ex';
 import commands from './commands';
 import registry from './utils/registry';
 import { ART_WORD_HEY_YOO, DEFAULT_SETTING } from './constants';
-import { fsExtra } from 'hey-yoo-utils';
 import { getAllPlugins } from './utils/getAllPlugins';
 import { pkgPath, settingPath } from './utils/path';
 import chalk from 'chalk';
@@ -16,7 +16,7 @@ async function hey() {
     setSetting(DEFAULT_SETTING);
   }
 
-  const packageJson = fsExtra.readJson(pkgPath);
+  const packageJson = await fsEx.readJson(pkgPath);
 
   const program = new Command();
   program
