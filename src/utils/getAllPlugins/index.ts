@@ -63,7 +63,7 @@ export async function getAllPlugins(): Promise<command[]> {
       if (Array.isArray(items)) {
         items.forEach((item) => {
           if (item.description) {
-            item.description = `[${pluginsPaths[index].name}]${item.description}`;
+            item.description = `[${text.blueGray(pluginsPaths[index].name)}] ${item.description}`;
           }
         });
       }
