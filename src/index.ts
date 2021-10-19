@@ -25,7 +25,7 @@ async function hey() {
     .version(packageJson?.version || '')
     .description(`${ART_WORD_HEY_YOO}
 
-${packageJson?.description}`);
+${text.blueGray(packageJson?.description)}`);
 
   let pluginsCommands = await getAllPlugins();
 
