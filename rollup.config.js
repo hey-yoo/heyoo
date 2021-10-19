@@ -11,7 +11,7 @@ const resolve = function (...args) {
 const externalDeps = [
   'commander',
   'ow',
-  'hey-yoo-utils',
+  'fs-extra',
   'file-url',
   'chalk',
   'chalk-ex',
@@ -30,6 +30,7 @@ const externalNode = [
   'buffer',
   'child_process',
   'zlib',
+  'url',
 ];
 
 module.exports = {
