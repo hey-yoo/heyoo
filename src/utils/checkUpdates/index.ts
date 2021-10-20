@@ -1,4 +1,4 @@
-import { getNpmPkgInfo } from '../../domain/npm';
+import axios from 'axios';
 import { getApplication, setApplication } from '../application';
 import boxen from 'boxen';
 import { getSetting } from '../setting';
@@ -33,9 +33,15 @@ Run ${text.blue(
     );
   }
 
-  const pkgInfo = await getNpmPkgInfo(pkg);
-  if (pkgInfo) {
-    appJson.latest = pkgInfo['dist-tags'].latest;
-    setApplication(appJson);
-  }
+  axios
+    .get(`https://registry.npmjs.org/${pkg}`, {
+      timeout: 1000,
+    })
+    .then((res) => {
+      if (res.data) {
+        appJson.latest = res.data['dist-tags'].latest;
+        setApplication(appJson);
+      }
+    })
+    .catch(() => {});
 }
