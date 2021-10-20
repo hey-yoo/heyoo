@@ -10,6 +10,7 @@ import { getAllPlugins } from './utils/getAllPlugins';
 import { pkgPath, settingPath } from './utils/path';
 import chalk from 'chalk';
 import { setSetting } from './utils/setting';
+import { checkUpdates } from './utils/checkUpdates';
 
 async function hey() {
   if (!fs.existsSync(settingPath)) {
@@ -22,8 +23,7 @@ async function hey() {
   program
     .name(text.pink('hey'))
     .usage(chalk.hex('#51cff7')('[command]'))
-    .version(packageJson?.version || '')
-    .description(`${ART_WORD_HEY_YOO}
+    .version(packageJson?.version || '').description(`${ART_WORD_HEY_YOO}
 
 ${text.blueGray(packageJson?.description)}`);
 
@@ -32,6 +32,8 @@ ${text.blueGray(packageJson?.description)}`);
   registry(program, commands.concat(pluginsCommands));
 
   program.parseAsync(process.argv);
+
+  checkUpdates('heyoo', packageJson.version);
 }
 
 hey();
