@@ -20,6 +20,8 @@ const externalDeps = [
   'axios',
   'decompress',
   'rimraf',
+  'merge',
+  'boxen',
 ];
 
 const externalNode = [
