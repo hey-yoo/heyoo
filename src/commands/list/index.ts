@@ -11,7 +11,7 @@ export default async function list() {
         ' ',
         text.blue(item.name),
         text.white(item.version),
-        `${text.white('(')}${text.blueGray(item.type)}${text.white(')')}`,
+        `${text.white('(')}${text.blueGray(item.type)}${text.white(')')}`
       );
     });
   });

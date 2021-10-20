@@ -39,31 +39,35 @@ export async function getAllPlugins(): Promise<command[]> {
     })
     .filter(Boolean) as localItem[];
 
-  const pluginsPaths = localPlugins.map((item) => {
-    const pkg = fsEx.readJsonSync(path.resolve(item.path, PACKAGE));
-    if (pkg && pkg.exports) {
-      const actualPkgPath = path.resolve(item.path, pkg.exports);
-      if (fs.existsSync(actualPkgPath)) {
-        return {
-          name: item.name,
-          path: actualPkgPath,
-        };
+  const pluginsPaths = localPlugins
+    .map((item) => {
+      const pkg = fsEx.readJsonSync(path.resolve(item.path, PACKAGE));
+      if (pkg && pkg.exports) {
+        const actualPkgPath = path.resolve(item.path, pkg.exports);
+        if (fs.existsSync(actualPkgPath)) {
+          return {
+            name: item.name,
+            path: actualPkgPath,
+          };
+        }
       }
-    }
-    return false;
-  }).filter(Boolean) as localItem[];
+      return false;
+    })
+    .filter(Boolean) as localItem[];
 
   const all = await Promise.all(
     pluginsPaths.map((item) => import(fileUrl(item.path)))
   );
 
   const allValidPlugins = all
-    .map(item => item.default)
+    .map((item) => item.default)
     .map((items, index) => {
       if (Array.isArray(items)) {
         items.forEach((item) => {
           if (item.description) {
-            item.description = `[${text.blueGray(pluginsPaths[index].name)}] ${item.description}`;
+            item.description = `[${text.blueGray(pluginsPaths[index].name)}] ${
+              item.description
+            }`;
           }
         });
       }
@@ -72,7 +76,9 @@ export async function getAllPlugins(): Promise<command[]> {
     .filter((item, index) => {
       const validateErr = validate(
         item,
-        `[${text.blueGray('plugins')}] ${text.orange(pluginsPaths[index].name)}`,
+        `[${text.blueGray('plugins')}] ${text.orange(
+          pluginsPaths[index].name
+        )}`,
         predicates.command
       );
       if (validateErr) {

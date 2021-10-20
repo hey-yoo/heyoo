@@ -9,4 +9,4 @@ export default {
   list: text.lightGreen('get the list of local plugins and packs'),
   run: text.yellow('run packs command'),
   setting: text.orange('open the setting file'),
-}
+};

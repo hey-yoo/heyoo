@@ -28,9 +28,7 @@ const commands: command[] = [
   {
     command: 'install <plugins>',
     action: install,
-    option: [
-      ['--git', 'download a git repository as a plugins'],
-    ],
+    option: [['--git', 'download a git repository as a plugins']],
     description: description.install,
   },
   {

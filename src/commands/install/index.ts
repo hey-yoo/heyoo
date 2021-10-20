@@ -27,14 +27,18 @@ async function installDeps(rootPath: string, packageManager: string) {
     const loading = ora(`install dependencies`).start();
 
     const isSuccess = await new Promise((resolve, reject) => {
-      exec(`${packageManager} install`, {
-        cwd: rootPath,
-      }, (err) => {
-        if (err) {
-          reject(err);
+      exec(
+        `${packageManager} install`,
+        {
+          cwd: rootPath,
+        },
+        (err) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(true);
         }
-        resolve(true);
-      });
+      );
     }).catch((err) => {
       loading.stop().clear();
       console.log(label.error, err.message);
@@ -89,7 +93,12 @@ async function unzip(input, output) {
 
   loading.succeed();
 }
-async function installPkg(pkg: string, version: string, plugins: plugins[], packageManager: packageManager): Promise<plugins | undefined> {
+async function installPkg(
+  pkg: string,
+  version: string,
+  plugins: plugins[],
+  packageManager: packageManager
+): Promise<plugins | undefined> {
   const pkgData = await fetchPkg(pkg);
   if (!pkgData) {
     return;
@@ -101,7 +110,7 @@ async function installPkg(pkg: string, version: string, plugins: plugins[], pack
   ensurePkgPath(localPluginsPath, pkg);
   const outputPath = path.resolve(localPluginsPath, pkg);
 
-  const existPlugins = plugins.find(item => item.name === pkg);
+  const existPlugins = plugins.find((item) => item.name === pkg);
   if (existPlugins) {
     if (existPlugins.version === version) {
       console.log(
@@ -121,7 +130,7 @@ async function installPkg(pkg: string, version: string, plugins: plugins[], pack
     return;
   }
 
-  await unzip(Buffer.from(pkgArrBuf), localPluginsPath)
+  await unzip(Buffer.from(pkgArrBuf), localPluginsPath);
 
   const packagePath = path.resolve(localPluginsPath, 'package');
   fs.renameSync(packagePath, outputPath);
@@ -167,16 +176,24 @@ async function fetchGitRepo(repo: string) {
   }
 
   if (!resPkg.data.content) {
-    console.log(label.warn, text.orange(`this repo don't have package.json file`));
+    console.log(
+      label.warn,
+      text.orange(`this repo don't have package.json file`)
+    );
     return;
   }
 
   loading.succeed();
 
-  const pkgJson = JSON.parse(Buffer.from(resPkg.data.content, resPkg.data.encoding).toString());
+  const pkgJson = JSON.parse(
+    Buffer.from(resPkg.data.content, resPkg.data.encoding).toString()
+  );
 
   if (!pkgJson.name || !pkgJson.version) {
-    console.log(label.warn, text.orange('package.json must had these attributes(name, version)'));
+    console.log(
+      label.warn,
+      text.orange('package.json must had these attributes(name, version)')
+    );
     return;
   }
 
@@ -204,7 +221,12 @@ async function downloadGitRepo(repo: string, dest: string) {
   loading.succeed();
   return true;
 }
-async function installGitRepo(repo: string, version: string, plugins: plugins[], packageManager: packageManager): Promise<plugins | undefined> {
+async function installGitRepo(
+  repo: string,
+  version: string,
+  plugins: plugins[],
+  packageManager: packageManager
+): Promise<plugins | undefined> {
   const pkgJson = await fetchGitRepo(repo);
   if (!pkgJson) {
     return;
@@ -216,7 +238,7 @@ async function installGitRepo(repo: string, version: string, plugins: plugins[],
   ensurePkgPath(localPluginsPath, pkgJson.name);
   const outputPath = path.resolve(localPluginsPath, pkgJson.name);
 
-  const existPlugins = plugins.find(item => item.name === repo);
+  const existPlugins = plugins.find((item) => item.name === repo);
   if (existPlugins) {
     if (existPlugins.version === version) {
       console.log(
@@ -249,7 +271,10 @@ async function installGitRepo(repo: string, version: string, plugins: plugins[],
 
 export default async function install(plugins: string, options) {
   let setting = getSetting();
-  if (!setting.packageManager || PKG_MANAGER.indexOf(setting.packageManager) === -1) {
+  if (
+    !setting.packageManager ||
+    PKG_MANAGER.indexOf(setting.packageManager) === -1
+  ) {
     const { packageManager } = await prompts({
       type: 'select',
       name: 'packageManager',
@@ -257,7 +282,7 @@ export default async function install(plugins: string, options) {
         title: item,
         value: item,
       })),
-      message: 'what package manager you want to use:'
+      message: 'what package manager you want to use:',
     });
     setting.packageManager = packageManager;
     setSetting(setting);
@@ -275,13 +300,25 @@ export default async function install(plugins: string, options) {
   let appJson = getApplication();
   let newPlugins;
   if (options.git) {
-    newPlugins = await installGitRepo(name, '', appJson.plugins, setting.packageManager);
+    newPlugins = await installGitRepo(
+      name,
+      '',
+      appJson.plugins,
+      setting.packageManager
+    );
   } else {
-    newPlugins = await installPkg(name, version, appJson.plugins, setting.packageManager);
+    newPlugins = await installPkg(
+      name,
+      version,
+      appJson.plugins,
+      setting.packageManager
+    );
   }
 
   if (newPlugins) {
-    const oldPluginsIndex = appJson.plugins.findIndex(item => item.name === newPlugins.name);
+    const oldPluginsIndex = appJson.plugins.findIndex(
+      (item) => item.name === newPlugins.name
+    );
     if (oldPluginsIndex > -1) {
       appJson.plugins[oldPluginsIndex] = newPlugins;
     } else {

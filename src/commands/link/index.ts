@@ -14,10 +14,7 @@ import { label, text } from 'chalk-ex';
 import fileUrl from 'file-url';
 import { getApplication, setApplication } from '../../utils/application';
 import ensurePkgPath from '../../utils/ensurePkgPath';
-import {
-  prompts,
-  rimraf,
-} from '../../deps';
+import { prompts, rimraf } from '../../deps';
 
 export default async function link(type: 'plugins' | 'packs') {
   if (!type || ![PLUGINS, PACKS].includes(type)) {
@@ -61,7 +58,7 @@ export default async function link(type: 'plugins' | 'packs') {
     const registryErr = validate(
       registry,
       text.orange(entryPath),
-      predicates.command,
+      predicates.command
     );
     if (registryErr) {
       return console.log(label.error, registryErr);
@@ -90,7 +87,7 @@ export default async function link(type: 'plugins' | 'packs') {
     }
 
     let appJson = getApplication();
-    const index = appJson[type].findIndex(item => item.name === pkg.name);
+    const index = appJson[type].findIndex((item) => item.name === pkg.name);
     if (index === -1) {
       appJson[type].push({
         name: pkg.name,

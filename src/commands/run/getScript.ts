@@ -11,7 +11,7 @@ export default function getScript(packs: string, script: string): string {
   const appJson = getApplication();
 
   let packsPath: string;
-  if (appJson.packs.find(item => item.name === packs)) {
+  if (appJson.packs.find((item) => item.name === packs)) {
     packsPath = fs.readlinkSync(path.resolve(localPacksPath, packs));
   } else {
     packsPath = path.resolve(currentPath, `node_modules/${packs}`);

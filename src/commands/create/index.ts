@@ -7,11 +7,7 @@ import { DEFAULT_SETTING, PACKAGE, PACKS, PLUGINS } from '../../constants';
 import { predicates, validate } from '../../utils/validate';
 import { currentPath } from '../../utils/path';
 import { getSetting } from '../../utils/setting';
-import {
-  prompts,
-  downloadGitRepo as download,
-  rimraf,
-} from '../../deps';
+import { prompts, downloadGitRepo as download, rimraf } from '../../deps';
 
 const COVER = 'COVER';
 const IS_EMPTY = 'IS_EMPTY';
@@ -42,7 +38,10 @@ function getRepoName(repo: string): string {
   return '';
 }
 
-async function downloadTemplate(template: string, dest: string): Promise<boolean> {
+async function downloadTemplate(
+  template: string,
+  dest: string
+): Promise<boolean> {
   const loading = ora(`template downloading`).start();
 
   const isSuccess = await new Promise<boolean>((resolve, reject) => {
@@ -81,21 +80,25 @@ export default async function create(type) {
 
   const appJson = getSetting();
 
-  const templateChoices = (appJson.template[type] || DEFAULT_SETTING.template[type]).map((item) => {
-    if (!validate(item, '', predicates.template)) {
-      return {
-        title: item.title,
-        value: item.repo,
-      };
-    }
-    return false;
-  }).filter(Boolean);
+  const templateChoices = (
+    appJson.template[type] || DEFAULT_SETTING.template[type]
+  )
+    .map((item) => {
+      if (!validate(item, '', predicates.template)) {
+        return {
+          title: item.title,
+          value: item.repo,
+        };
+      }
+      return false;
+    })
+    .filter(Boolean);
 
   const { template } = await prompts({
     type: 'select',
     name: 'template',
     choices: templateChoices,
-    message: `choose ${type} template:`
+    message: `choose ${type} template:`,
   });
 
   const { name } = await prompts({
@@ -155,7 +158,7 @@ export default async function create(type) {
     type: 'module',
     exports: './index.js',
     engines: {
-      node: '^12.20.0 || ^14.13.1 || >=16.0.0'
+      node: '^12.20.0 || ^14.13.1 || >=16.0.0',
     },
     scripts: {},
     repository: {
@@ -165,9 +168,11 @@ export default async function create(type) {
     keywords: (keywords || '').replace(/ /g, '').split(','),
     author,
     license,
-    bugs: repoName ? {
-      url: `https://github.com/${repoName}/issues`,
-    } : '',
+    bugs: repoName
+      ? {
+          url: `https://github.com/${repoName}/issues`,
+        }
+      : '',
     homepage: repoName ? `https://github.com/${repoName}#readme` : '',
   };
 
@@ -192,7 +197,7 @@ export default async function create(type) {
     mission.forEach((item) => {
       if (
         item.type === COVER ||
-        item.type === IS_EMPTY && pkg && !pkg[item.key]
+        (item.type === IS_EMPTY && pkg && !pkg[item.key])
       ) {
         if (pkg) {
           pkg[item.key] = customerPkg[item.key];
