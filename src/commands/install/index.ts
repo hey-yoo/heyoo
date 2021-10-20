@@ -163,9 +163,17 @@ async function fetchGitRepo(repo: string) {
     console.log(label.warn, text.orange('this repo is empty'));
   }
 
+  let search = '';
+  const delimiterIndex = repo.indexOf('#');
+  if (delimiterIndex > 0 && delimiterIndex < repo.length) {
+    const [repoName, repoBranch] = repo.split('#');
+    repo = repoName;
+    search = `?ref=${repoBranch}`;
+  }
+
   const resPkg = await axios({
     method: 'get',
-    url: `https://api.github.com/repos/${repo}/contents/package.json`,
+    url: `https://api.github.com/repos/${repo}/contents/package.json${search}`,
     responseType: 'json',
   }).catch((err) => {
     loading.stop().clear();
@@ -176,6 +184,7 @@ async function fetchGitRepo(repo: string) {
   }
 
   if (!resPkg.data.content) {
+    loading.stop().clear();
     console.log(
       label.warn,
       text.orange(`this repo don't have package.json file`)
