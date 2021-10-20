@@ -53,3 +53,9 @@ export interface setting {
 export interface heyConfig {
   packs: string;
 }
+
+export interface packageJson {
+  name: string;
+  version: string;
+  description: string;
+}
