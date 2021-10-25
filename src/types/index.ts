@@ -39,7 +39,7 @@ export interface application {
   packs: packs[];
 }
 
-export type packageManager = 'npm' | 'pnpm' | 'yarn' | ''
+export type packageManager = 'npm' | 'pnpm' | 'yarn' | '';
 
 export interface setting {
   packageManager: packageManager;
@@ -51,4 +51,10 @@ export interface setting {
 
 export interface heyConfig {
   packs: string;
+}
+
+export interface packageJson {
+  name: string;
+  version: string;
+  description: string;
 }

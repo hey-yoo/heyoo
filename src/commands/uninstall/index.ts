@@ -7,7 +7,9 @@ import { rimraf } from '../../deps';
 export default async function uninstall(plugins: string) {
   let appJson = getApplication();
 
-  const index = appJson.plugins.findIndex(item => item.name === plugins && item.type === 'install');
+  const index = appJson.plugins.findIndex(
+    (item) => item.name === plugins && item.type === 'install'
+  );
   if (index > -1) {
     const waitUninstallPlugins = appJson.plugins[index];
     rimraf.sync(path.resolve(localPluginsPath, waitUninstallPlugins.name));

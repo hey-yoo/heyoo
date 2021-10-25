@@ -1,6 +1,6 @@
 import process from 'process';
 import path from 'path';
-import { pathExtra } from 'hey-yoo-utils';
+import { fileURLToPath } from 'url';
 import {
   APPLICATION,
   LOCAL_PATH,
@@ -10,9 +10,8 @@ import {
   SETTING,
 } from '../../constants';
 
-export const { __dirname, __filename } = pathExtra.getGlobalPath(
-  import.meta.url
-);
+export const __filename = fileURLToPath(import.meta.url);
+export const __dirname = path.dirname(__filename);
 export const basePath = path.resolve(__dirname, '../');
 export const pkgPath = path.resolve(basePath, PACKAGE);
 export const settingPath = path.resolve(basePath, SETTING);

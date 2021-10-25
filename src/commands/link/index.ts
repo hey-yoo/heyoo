@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs';
+import fsEx from 'fs-extra';
 import { PACKS, PLUGINS } from '../../constants';
 import {
   currentPath,
@@ -8,16 +9,12 @@ import {
   localPacksPath,
   localPath,
 } from '../../utils/path';
-import { fsExtra } from 'hey-yoo-utils';
 import { predicates, validate } from '../../utils/validate';
 import { label, text } from 'chalk-ex';
 import fileUrl from 'file-url';
 import { getApplication, setApplication } from '../../utils/application';
 import ensurePkgPath from '../../utils/ensurePkgPath';
-import {
-  prompts,
-  rimraf,
-} from '../../deps';
+import { prompts, rimraf } from '../../deps';
 
 export default async function link(type: 'plugins' | 'packs') {
   if (!type || ![PLUGINS, PACKS].includes(type)) {
@@ -33,14 +30,14 @@ export default async function link(type: 'plugins' | 'packs') {
     type = selected.type;
   }
 
-  const pkg = fsExtra.readJson(currentPkgPath);
+  const pkg = await fsEx.readJson(currentPkgPath);
   if (!pkg) {
     return console.log(label.error, `${currentPkgPath} isn't exist!`);
   }
 
   const rootPath = type === PLUGINS ? localPluginsPath : localPacksPath;
-  fsExtra.ensureDir(localPath);
-  fsExtra.ensureDir(rootPath);
+  await fsEx.ensureDir(localPath);
+  await fsEx.ensureDir(rootPath);
 
   const pkgErr = validate(
     pkg,
@@ -61,7 +58,7 @@ export default async function link(type: 'plugins' | 'packs') {
     const registryErr = validate(
       registry,
       text.orange(entryPath),
-      predicates.command,
+      predicates.command
     );
     if (registryErr) {
       return console.log(label.error, registryErr);
@@ -90,7 +87,7 @@ export default async function link(type: 'plugins' | 'packs') {
     }
 
     let appJson = getApplication();
-    const index = appJson[type].findIndex(item => item.name === pkg.name);
+    const index = appJson[type].findIndex((item) => item.name === pkg.name);
     if (index === -1) {
       appJson[type].push({
         name: pkg.name,

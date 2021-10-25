@@ -59,5 +59,5 @@ export const DEFAULT_PACKAGE = {
   bugs: {
     url: '',
   },
-  homepage: ''
+  homepage: '',
 };

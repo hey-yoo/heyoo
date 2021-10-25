@@ -64,12 +64,12 @@ hey unlink [name]
 Install the plugins. Supports the installation of plugins published to npm registry, GitHub or GitLab.
 
 ```shell
-hey install <plugins>
+hey install [options] <plugins>
 
 # npm registry example:
 hey install @heyoo/plugins-js-template
 # GitHub repo example:
-hey install hey-yoo/heyoo-template#plugins-js-template
+hey install --git hey-yoo/heyoo-template#plugins-js-template
 ```
 
 You can check this [document](https://www.npmjs.com/package/download-git-repo) to learn more about 

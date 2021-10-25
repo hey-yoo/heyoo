@@ -11,10 +11,17 @@ import exec from './exec';
 export default async function run(script) {
   const config = await getConfig<heyConfig>(currentPath);
   if (!config) {
-    console.log(label.error, `Can't find ${HEY_CONFIG_FILENAME} in ${currentPath}`);
+    console.log(
+      label.error,
+      `Can't find ${HEY_CONFIG_FILENAME} in ${currentPath}`
+    );
     return;
   }
-  const validateErr = validate(config, HEY_CONFIG_FILENAME, predicates.heyConfig);
+  const validateErr = validate(
+    config,
+    HEY_CONFIG_FILENAME,
+    predicates.heyConfig
+  );
   if (validateErr) {
     console.log(label.error, validateErr);
     return;
@@ -22,7 +29,10 @@ export default async function run(script) {
 
   const scriptPath = getScript(config.packs, script);
   if (!scriptPath) {
-    console.log(label.error, `${text.blue(config.packs)}'s ${text.orange(script)} script isn't exist`);
+    console.log(
+      label.error,
+      `${text.blue(config.packs)}'s ${text.orange(script)} script isn't exist`
+    );
     return;
   }
 

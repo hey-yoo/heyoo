@@ -1,8 +1,12 @@
 import path from 'path';
 import fs from 'fs';
+import fsEx from 'fs-extra';
 import { getApplication, setApplication } from '../../utils/application';
-import { fsExtra } from 'hey-yoo-utils';
-import { currentPkgPath, localPacksPath, localPluginsPath } from '../../utils/path';
+import {
+  currentPkgPath,
+  localPacksPath,
+  localPluginsPath,
+} from '../../utils/path';
 import { predicates, validate } from '../../utils/validate';
 import { label, text } from 'chalk-ex';
 import { PACKAGE, PACKS, PLUGINS } from '../../constants';
@@ -17,7 +21,9 @@ export default async function unlink(name) {
       if (basePath) {
         return;
       }
-      const index = appJson[type].findIndex(item => item.name === name && item.type === 'link');
+      const index = appJson[type].findIndex(
+        (item) => item.name === name && item.type === 'link'
+      );
       if (index > -1) {
         basePath = {
           [PLUGINS]: localPluginsPath,
@@ -37,7 +43,7 @@ export default async function unlink(name) {
     }
   }
 
-  const pkg = fsExtra.readJson(tagPkgPath);
+  const pkg = await fsEx.readJson(tagPkgPath);
   if (!pkg) {
     return;
   }
@@ -45,7 +51,11 @@ export default async function unlink(name) {
   let type;
   const types = [PLUGINS, PACKS, ''];
   for (type of types) {
-    if ((appJson[type] || []).find(item => item.name === pkg.name && item.type === 'link')) {
+    if (
+      (appJson[type] || []).find(
+        (item) => item.name === pkg.name && item.type === 'link'
+      )
+    ) {
       break;
     }
   }
@@ -60,7 +70,10 @@ export default async function unlink(name) {
       return console.log(label.error, pkgErr);
     }
 
-    const pluginsLinkPath = path.resolve(type === PLUGINS ? localPluginsPath : localPacksPath, pkg.name);
+    const pluginsLinkPath = path.resolve(
+      type === PLUGINS ? localPluginsPath : localPacksPath,
+      pkg.name
+    );
     if (fs.existsSync(pluginsLinkPath)) {
       const stats = fs.lstatSync(pluginsLinkPath);
       if (stats.isSymbolicLink()) {
@@ -72,9 +85,7 @@ export default async function unlink(name) {
           text.white(pkg.version)
         );
 
-        appJson[type] = appJson[type].filter(
-          (item) => item.name !== pkg.name
-        );
+        appJson[type] = appJson[type].filter((item) => item.name !== pkg.name);
         setApplication(appJson);
         return;
       }

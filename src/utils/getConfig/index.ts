@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import { fsExtra } from 'hey-yoo-utils';
+import fsEx from 'fs-extra';
 import fileUrl from 'file-url';
 import {
   HEY_CONFIG_FILENAME,
@@ -38,7 +38,7 @@ export async function getConfig<T>(basePath: string): Promise<T | undefined> {
     config = await import(fileUrl(configPath));
     config = config.default;
   } else if (cfgExt === JSON_EXT) {
-    config = fsExtra.readJson(configPath);
+    config = await fsEx.readJson(configPath);
   }
   return config;
 }

@@ -62,12 +62,12 @@ hey unlink [name]
 安装插件。支持安装发布到 npm registry 、 GitHub 或者 GitLab 上的插件。
 
 ```shell
-hey install <plugins>
+hey install [options] <plugins>
 
 # npm registry example:
 hey install @heyoo/plugins-js-template
 # GitHub repo example:
-hey install hey-yoo/heyoo-template#plugins-js-template
+hey install --git hey-yoo/heyoo-template#plugins-js-template
 ```
 
 可以查阅这份 [文档](https://www.npmjs.com/package/download-git-repo) 了解更多有关如何安装 GitHub 或者 GitLab 插件的信息。
