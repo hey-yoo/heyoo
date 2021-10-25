@@ -7,7 +7,6 @@ export const DEFAULT_HEY_CONFIG: heyConfig = {
 export const DEFAULT_APPLICATION: application = {
   plugins: [],
   packs: [],
-  latest: '',
 };
 
 export const DEFAULT_SETTING: setting = {

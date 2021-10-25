@@ -37,7 +37,6 @@ export interface npmTemplate extends template {
 export interface application {
   plugins: plugins[];
   packs: packs[];
-  latest: string;
 }
 
 export type packageManager = 'npm' | 'pnpm' | 'yarn' | '';
