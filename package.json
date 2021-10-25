@@ -1,6 +1,6 @@
 {
   "name": "heyoo",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "heyoo is a command-line tool written in typescript.",
   "bin": {
     "hey": "./bin/index.js"
