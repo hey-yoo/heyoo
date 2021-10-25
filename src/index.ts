@@ -10,7 +10,6 @@ import { getAllPlugins } from './utils/getAllPlugins';
 import { pkgPath, settingPath } from './utils/path';
 import chalk from 'chalk';
 import { setSetting } from './utils/setting';
-import { checkUpdates } from './utils/checkUpdates';
 import { packageJson } from './types';
 
 async function hey() {
